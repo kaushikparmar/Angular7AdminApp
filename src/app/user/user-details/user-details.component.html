@@ -1,0 +1,44 @@
+<div class="pb-user-details-component">
+  <div class="custom-padding" *ngIf="profileDetails.length">
+      <mat-nav-list class="custom-nav-list">
+          <mat-label *ngIf="profileDetails.length">
+            <a [routerLink]="['/user']">User</a>
+          </mat-label>
+          <mat-label *ngIf="profileDetails.length">></mat-label>
+          <mat-label *ngIf="profileDetails.length">View {{profileDetails[0].name}}</mat-label>
+        </mat-nav-list>
+        <form class="custom-form-padding">
+          <mat-tab-group *ngIf="profileDetails?.length">
+            <mat-tab label="Profile">
+              <pb-user-profile *ngIf="profileDetails?.length" [profileDetails]="profileDetails"></pb-user-profile>
+              <label class="no-data-found" *ngIf="!profileDetails.length">No Data Available</label>
+            </mat-tab>
+            <mat-tab label="Favorite List">
+              <pb-favorite-list *ngIf="favoriteList?.length" [favoriteList]="favoriteList"></pb-favorite-list>
+              <label class="no-data-found" *ngIf="!favoriteList.length">No Data Available</label>
+            </mat-tab>
+            <mat-tab label="Service detail" >
+              <pb-service-detail *ngIf="serviceDetails?.length" [serviceDetails]="serviceDetails"></pb-service-detail>
+              <label class="no-data-found" *ngIf="!serviceDetails?.length" >No Data Available</label>
+            </mat-tab>
+            <mat-tab label="Rates" *ngIf="userRole !== 'pet-owner'">
+              <pb-rates></pb-rates>
+            </mat-tab>
+            <mat-tab label="Availability" *ngIf="userRole !== 'pet-owner'">
+              <pb-availability *ngIf="serviceAvailabilities?.length" [serviceAvailabilities]="serviceAvailabilities"></pb-availability>
+              <label class="no-data-found" *ngIf="!serviceAvailabilities?.length" >No Data Available</label>
+            </mat-tab>
+          </mat-tab-group>
+        </form>
+  </div>
+
+  <div class="user-not-found" *ngIf="!profileDetails.length && !isLoading">
+    <div class="flex-item">
+      <mat-label>User Not Exist</mat-label>
+    </div>
+  </div>
+</div>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>
+

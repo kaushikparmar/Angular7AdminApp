@@ -1,0 +1,85 @@
+<section class="reward-details-section custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/reward']">Reward Points</a>
+    </mat-label>
+    <mat-label>></mat-label>
+
+    <mat-label *ngIf="path === 'edit'">Edit </mat-label>
+    <mat-label *ngIf="path === 'view'">View </mat-label>
+  </mat-nav-list>
+
+  <!-- <label class="custom-header" *ngIf="path === 'edit'">Edit FAQ</label>
+  <label class="custom-header" *ngIf="path === 'view'">View FAQ</label> -->
+
+  <form #rewardForm="ngForm" novalidate (ngSubmit)="crudReward(rewardForm.valid)" class="custom-form-padding">
+
+    <div class="row">
+
+
+      <div class="col-12 col-sm-6 col-md-6">
+
+        <mat-form-field>
+          <input matInput placeholder="Event"  type="text" name="title" minlength="2" maxlength="50" [(ngModel)]="rewardData.event" maxlength="255" required
+            autocomplete="off" maxlength="50"  pattern="^[a-zA-Z0-9][a-zA-Z0-9\s]+$" #event="ngModel" [disabled]="path === 'view'">
+          <mat-error *ngIf="event?.errors?.required">
+            Event is required
+          </mat-error>
+          <mat-error *ngIf="event?.errors?.pattern && !event?.errors.minlength">
+            Invalid event format
+          </mat-error>
+          <mat-error *ngIf="event?.errors?.minlength">
+              Mimimum 2 characters
+            </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-6">
+
+          <mat-form-field>
+            <input matInput placeholder="Reward Points"  type="text"   name="amount" [(ngModel)]="rewardData.amount" maxlength="255" required
+              autocomplete="off"   maxlength="5"  type="text" pattern="^[0-9]+$" #amount="ngModel" [disabled]="path === 'view'">
+            <mat-error *ngIf="amount?.errors?.required" >
+                Reward points is required
+            </mat-error>
+            <mat-error *ngIf="amount?.errors?.pattern">
+              Invalid reward points format
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+
+      <div class="col-12">
+        <mat-form-field>
+          <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="10"
+            placeholder="Description"   maxlength="250"  required name="description" [(ngModel)]="rewardData.description"
+            pattern="^\S$|^\S[\s\S]*$" #description="ngModel" [disabled]="path === 'view'"></textarea>
+          <mat-error *ngIf="description?.errors?.required">
+            Short description is required
+          </mat-error>
+          <mat-error *ngIf="description?.errors?.pattern">
+            Invalid  description format
+          </mat-error>
+        </mat-form-field>
+
+
+      </div>
+
+
+
+    </div>
+
+    <div class="post-btn">
+      <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='add'">Submit</button>
+      <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='edit'">Update</button>
+      <button mat-raised-button type="button" color="warn" *ngIf="path==='add' || path==='edit'" class="add-btn"
+        [routerLink]="['/reward/list']">Cancel</button>
+      <button mat-raised-button type="button" color="warn" *ngIf="path==='view'" class="add-btn"
+        [routerLink]="['/reward/list']">Close</button>
+    </div>
+
+  </form>
+</section>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

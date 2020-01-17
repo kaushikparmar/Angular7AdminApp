@@ -1,0 +1,150 @@
+<section class="faq-details-section custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/faq']">Help</a>
+    </mat-label>
+    <mat-label>></mat-label>
+    <mat-label *ngIf="path === 'add'">Add Help/FAQ</mat-label>
+    <mat-label *ngIf="path === 'edit'">Edit Help/FAQ</mat-label>
+    <mat-label *ngIf="path === 'view'">View Help/FAQ</mat-label>
+  </mat-nav-list>
+
+  <!-- <label class="custom-header" *ngIf="path === 'edit'">Edit FAQ</label>
+  <label class="custom-header" *ngIf="path === 'add'">Add FAQ</label>
+  <label class="custom-header" *ngIf="path === 'view'">View FAQ</label> -->
+
+  <form #faqForm="ngForm" novalidate (ngSubmit)="crudFaq(faqForm.valid)" class="custom-form-padding">
+
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-6">
+
+        <mat-form-field>
+          <mat-select placeholder="Select Topics" required name="Topics_id" #topic="ngModel" required
+            [(ngModel)]="faqData.topics" [disabled]="path==='view'" (selectionChange)="fetchSubTopics()">
+            <mat-option *ngFor="let topic of fetchTopicsData" [value]="topic.id">
+              {{topic.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="topic?.errors?.required && (topic.dirty || topic.touched  || isSubmited)">
+              Topics is required
+            </mat-error>
+        </mat-form-field>
+
+      </div>
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <mat-select placeholder="Select Sub Topics" required name="sub_topics_id" #subtopic="ngModel" required
+            [(ngModel)]="faqData.subtopics" [disabled]="path==='view'">
+            <mat-option *ngFor="let subtopic of fetchSubTopicsData" [value]="subtopic.id">
+              {{subtopic.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="subtopic?.errors?.required && (subtopic.dirty || subtopic.touched  || isSubmited)">
+              Sub topics is required
+            </mat-error>
+        </mat-form-field>
+
+      </div>
+      <div class="col-12">
+
+
+        <mat-form-field>
+          <textarea cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="10" matInput pattern="^\S$|^\S[\s\S]*$" minlength="2" maxlength="250"
+            [disabled]="path==='view'" placeholder="Question" #question="ngModel" name="question" required
+            [(ngModel)]="faqData.question"></textarea>
+            <mat-error *ngIf="question?.errors?.required && (question.dirty || question.touched  || isSubmited)">
+                Question is required
+              </mat-error>
+
+              <mat-error
+                *ngIf="question?.errors?.pattern && (question.dirty || question.touched  || isSubmited) && !question?.errors?.minlength">
+                Invalid question
+              </mat-error>
+              <mat-error *ngIf="question?.errors?.minlength && (question.dirty || question.touched  || isSubmited)">
+                Minimum 2 characters
+              </mat-error>
+
+        </mat-form-field>
+
+      </div>
+      <div class="col-12">
+        <!-- <mat-form-field>
+          <textarea cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="10" matInput maxlength="500" pattern="^\S$|^\S[\s\S]*$" minlength="2" maxlength="250"
+            [disabled]="path==='view'" placeholder="Answer" #answer="ngModel" name="answer" required
+            [(ngModel)]="faqData.answer" ></textarea>
+            <mat-error *ngIf="answer?.errors?.required && (answer.dirty || answer.touched  || isSubmited)">
+                Answer is required
+              </mat-error>
+              <mat-error *ngIf="answer?.errors?.pattern && (answer.dirty || answer.touched  || isSubmited)">
+                Invalid answer
+              </mat-error>
+
+        </mat-form-field> -->
+        <label class="custom-label">Answer:</label>
+        <quill-editor [style]="{height: '250px'}" style="margin-top: 10px" name="answer" [(ngModel)]="faqData.answer"
+        *ngIf="path !== 'view'">
+        <div quill-editor-toolbar>
+          <span class="ql-formats">
+            <button class="ql-bold"></button>
+            <button class="ql-italic"></button>
+            <button class="ql-underline"></button>
+            <button class="ql-strike"></button>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+            <select class="ql-align">
+              <option selected></option>
+              <option value="center"></option>
+              <option value="right"></option>
+              <option value="justify"></option>
+            </select>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-link"></button>
+            <button class="ql-image"></button>
+          </span>
+        </div>
+      </quill-editor>
+        <div class="view-content-div" *ngIf="path === 'view'" [innerHTML]="faqData.answer">
+
+        </div>
+        <div *ngIf="path === 'view' && !faqData.answer">NA</div>
+      </div>
+      <div class="col-12">
+        <div class="upload-photo-wrapper d-flex">
+          <label class="custom-label" *ngIf="path ==='view'">Uploaded Image:</label>
+            <div class='upload-btn ml-2 mr-auto' *ngIf="path!=='view'">
+                <input type='file' #uploadImageInput accept=".png, .jpg, .jpeg" name="image" id='upload-image1'
+                  class='upload-input' (change)="fileUploads($event)" />
+                <label class='mb-0 upload-text d-flex align-items-center' for='upload-images'>
+                  <button>Upload photo</button>
+                </label>
+              </div>
+              <div class="upload-img" *ngIf="faqData.imageUrl">
+                  <mat-icon color="warn" (click)="removeImage();"
+                  *ngIf="path!=='view'">highlight_off</mat-icon>
+                  <img  [src]="faqData.imageUrl" alt="location-img">
+              </div>
+              <label class="d-flex align-items-center mb-0 mt-2" *ngIf="!faqData.imageUrl && path === 'view'">
+              NA
+            </label>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="post-btn">
+        <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='add'">Submit</button>
+          <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='edit'">Update</button>
+          <button mat-raised-button type="button" color="warn" *ngIf="path==='add' || path==='edit'" class="add-btn"
+            [routerLink]="['/faq/list']">Cancel</button>
+            <button mat-raised-button type="button" color="warn" *ngIf="path==='view'" class="add-btn"
+            [routerLink]="['/faq/list']">Close</button>
+      </div>
+
+  </form>
+</section>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

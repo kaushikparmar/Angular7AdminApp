@@ -1,0 +1,194 @@
+<div class="pb-rewardHistory-list custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/reward-history']">Reward History</a>
+    </mat-label>
+    <mat-label>></mat-label>
+
+    <mat-label>List</mat-label>
+  </mat-nav-list>
+  <div class="pb-table-wraper">
+    <div class="filter-section" [class.opened]="searchPanel">
+      <form #searchReward="ngForm" (submit)="getRewards()">
+        <div class="listing-form d-flex justify-content-between align-items-center">
+          <div class="search-box">
+            <mat-form-field class="mat-form-field">
+              <mat-label>Search</mat-label>
+              <input matInput name="search" [(ngModel)]="tableConfig.searchString" />
+              <!--
+                <mat-error *ngIf="login_id.hasError('required')">
+                  Login ID is <strong>required</strong>
+                </mat-error>
+              -->
+              <!-- <mat-icon class="settings-icon unselectable">search</mat-icon> -->
+            </mat-form-field>
+            <button mat-raised-button type="submit" color="primary" class="search-btn">Search</button>
+          </div>
+          <div class="right-side-btn d-flex align-items-center">
+            <div class="add-div">
+              <!-- <button mat-raised-button [routerLink]="['/rewardHistory', 'add']" color="primary" class="add-btn">Add RewardHistory</button> -->
+            </div>
+            <div class="filter-btn">
+							<button mat-raised-button color="primary" type="button" class="filter-list-icon"
+							(click)="searchPanel = !searchPanel">
+								Filter
+							</button>
+						</div>
+          </div>
+        </div>
+        <div class="advanced-search-form">
+					<form class="search-form-padding">
+						<div class="row">
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>User</mat-label>
+									<input matInput [(ngModel)]="userName" name="userName" />
+								</mat-form-field>
+							</div>
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Event</mat-label>
+									<input matInput [(ngModel)]="eventName" name="eventName" />
+								</mat-form-field>
+							</div>
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Type</mat-label>
+									<mat-select value="Select Type" [(ngModel)]="filterType" name="filterType">
+										<mat-option value="Select Type">
+											Select Type
+                    </mat-option>
+                    <mat-option value="earn">Earn</mat-option>
+                    <mat-option value="redeem">Redeem</mat-option>
+									</mat-select>
+								</mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Choose a startdate</mat-label>
+										<input matInput [matDatepicker]="picker1" [(ngModel)]="startDate" (ngModelChange)="changeStartDate();" name="startdate" disabled>
+										<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+										<mat-datepicker #picker1 disabled="false"></mat-datepicker>
+								</mat-form-field>
+							</div>
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Choose a enddate</mat-label>
+									<input matInput [matDatepicker]="picker2" [min]="startDate" [(ngModel)]="endDate" name="enddate" disabled>
+									<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+									<mat-datepicker #picker2 disabled="false"></mat-datepicker>
+								</mat-form-field>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4"></div>
+						</div>
+						<div class="advanced-search-btn">
+							<button mat-raised-button type="submit" color="primary" class="search-btn" (click)="filterSearch();">Search</button>
+							<button mat-raised-button type="button" color="warn" class="clear-btn" (click)="clearFilter();">Clear</button>
+						</div>
+					</form>
+				</div>
+      </form>
+    </div>
+    <div class="pb-table">
+      <div class="mat-elevation-z8">
+
+        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+
+
+          <ng-container matColumnDef="user">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="name">User</th>
+            <td mat-cell *matCellDef="let rewardHistory">
+              <span *ngIf="rewardHistory['user.name']">{{rewardHistory['user.name']}}</span>
+              <span *ngIf="!rewardHistory['user.name']">-</span>
+            </td>
+          </ng-container>
+
+
+          <!-- Topic Column -->
+          <ng-container matColumnDef="event">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="event_name">Event</th>
+            <td mat-cell *matCellDef="let rewardHistory">
+              <span *ngIf="rewardHistory?.event_name">{{rewardHistory?.event_name}}</span>
+              <span *ngIf="!rewardHistory?.event_name">-</span>
+            </td>
+          </ng-container>
+
+
+
+
+          <!-- Sub Topic Column -->
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="event_description">Desciption</th>
+            <td mat-cell *matCellDef="let rewardHistory">
+              <span *ngIf="rewardHistory.event_description">{{rewardHistory.event_description}}</span>
+              <span *ngIf="!rewardHistory.event_description">-</span>
+            </td>
+          </ng-container>
+
+
+
+          <!-- Sub Topic Column -->
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="type">Type</th>
+            <td mat-cell *matCellDef="let rewardHistory">
+              <span *ngIf="rewardHistory.type">{{rewardHistory.type}}</span>
+              <span *ngIf="!rewardHistory.type">-</span>
+            </td>
+          </ng-container>
+
+
+
+          <!-- Sub Topic Column -->
+          <ng-container matColumnDef="points">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="event_amount">Points</th>
+            <td mat-cell *matCellDef="let rewardHistory">
+              <span *ngIf="rewardHistory.event_amount">{{rewardHistory.event_amount}}</span>
+              <span *ngIf="!rewardHistory.event_amount">-</span>
+            </td>
+          </ng-container>
+
+
+
+
+          <!-- Created at Column -->
+          <ng-container matColumnDef="created_at">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="created_at">Created On</th>
+            <td mat-cell *matCellDef="let rewardHistory">{{ rewardHistory.created_at | date: 'MM-dd-yyyy' }}</td>
+          </ng-container>
+
+
+
+          <!-- Star Column -->
+          <ng-container matColumnDef="menu">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let reward">
+              <mat-menu #appMenu="matMenu">
+                <button mat-menu-item (click)="viewDetail(reward)">View</button>
+              </mat-menu>
+              <button mat-icon-button [matMenuTriggerFor]="appMenu"
+                (click)="$event.preventDefault(); $event.stopPropagation()">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="viewDetail(row)"></tr>
+        </table>
+        <div class="no-records" *ngIf="TABLE_DATA?.length === 0">
+          No records found
+        </div>
+
+        <mat-paginator class="mat-paginator-sticky" [length]="tableConfig.totalRecords" [pageSizeOptions]="[10, 20, 30]"
+          showFirstLastButtons (page)="pageChanged($event)"></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

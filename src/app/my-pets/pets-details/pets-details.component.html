@@ -1,0 +1,145 @@
+<section class="pets-details-section custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/manage-pets']">Manage pets</a>
+    </mat-label>
+    <mat-label>></mat-label>
+    <mat-label>View</mat-label>
+  </mat-nav-list>
+
+
+  <form #petdetailsForm="ngForm" novalidate class="custom-form-padding">
+
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Pet Name" type="text" name="petName" disabled [(ngModel)]="detailsData.name">
+          <span *ngIf="!detailsData.name">-</span>
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Type" type="text" name="pet-type" disabled [(ngModel)]="petDetails.type">
+          <span *ngIf="!petDetails.type">-</span>
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Breed" type="text" name="breed" disabled [(ngModel)]="detailsData.breed">
+          <span *ngIf="!detailsData.breed">-</span>
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Gender" type="text" name="gender" disabled [(ngModel)]="detailsData.gender">
+          <span *ngIf="!detailsData.gender">-</span>
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="City of Birth" type="text" name="city" disabled [(ngModel)]="detailsData.city">
+          <span *ngIf="!detailsData.city">-</span>
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Date of Birth" type="text" name="dob" disabled [(ngModel)]="formatedDob">
+          <span *ngIf="!detailsData.dob">-</span>
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Size (LBS)" type="text" name="lbs" disabled [(ngModel)]="lbSize">
+          <span *ngIf="!detailsData.size">-</span>
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Size (KG)" type="text" name="kg" disabled [(ngModel)]="detailsData.size">
+          <span *ngIf="!detailsData.size">-</span>
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Owner Name" type="text" name="Name" disabled [(ngModel)]="ownerDetails.name">
+          <span *ngIf="!ownerDetails.name">-</span>
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <textarea cdkTextareaAutosize cdkAutosizeMinRows="3" placeholder="Slogan" cdkAutosizeMaxRows="5" matInput
+                    disabled placeholder="Slogan" name="slogan" [(ngModel)]="detailsData.slogan">
+          </textarea>
+          <span *ngIf="!detailsData.slogan">-</span>
+        </mat-form-field>
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <div class="col-12 col-sm-6 col-md-6">
+        <div class="upload-photo-wrapper d-flex">
+          <label class="custom-label">Profile Pic:</label>
+          <div class="upload-img">
+            <!-- <mat-icon color="warn" (click)="removeImage();" *ngIf="path!=='view'">highlight_off</mat-icon> -->
+            <img src="{{originUrl}}/upload/{{detailsData.profile_pic}}" style="height:100%;">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-6">
+        <label class="custom-label">Cover Pic:</label>
+        <div class="upload-img">
+          <img src="{{originUrl}}/upload/{{detailsData.cover_pic}}" alt="" style="height:250px; width: 100%" >
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-12" *ngIf = "isGallery && isGallery.length">
+        <label class="custom-label">Uploaded Photos:</label>
+        <!-- <div *ngIf="imagesRect.length === 0" class="info-msg w-100" style="text-align: center;margin-bottom: 20px;">
+          No photos available
+        </div> -->
+        <div class="my-app-custom-plain-container-row">
+          <ng-container *ngFor="let img of imagesRect; let i = index">
+            <div *ngIf="i <= 5" class="custom-img-width custom-img-border">
+              <a class="more" *ngIf="(imagesRect.length) >= 7" (click)="openImageModalRow1(img)">
+                +{{imagesRect.length - 5 - 1}}
+                more
+              </a>
+              <img *ngIf="img.plain && img.plain.img; else noThumb1" class="my-app-custom-image-row"
+                [src]="img.plain.img" (click)="openImageModalRow1(img)" />
+              <ng-template #noThumb1>
+                <img class="my-app-custom-image-row" [src]="img.modal.img" (click)="openImageModalRow1(img)" />
+              </ng-template>
+            </div>
+          </ng-container>
+        </div>
+        <ks-modal-gallery [id]="1" [modalImages]="imagesRect" [plainGalleryConfig]="customPlainGalleryRowConfig1">
+        </ks-modal-gallery>
+      </div>
+
+    </div>
+
+    <div class="post-btn">
+      <button mat-raised-button type="button" color="warn" class="add-btn"
+        [routerLink]="['/manage-pets/list']">Close</button>
+    </div>
+
+  </form>
+</section>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

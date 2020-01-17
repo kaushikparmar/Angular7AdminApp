@@ -1,0 +1,79 @@
+<ng-progress></ng-progress>
+<div class="app-component">
+  <mat-toolbar color="primary" *ngIf="currentRoute!=='/login'" role="heading">
+    <img src="./assets/logo-white.png" width="150px">
+    <mat-icon class="menu-icon unselectable" (click)="toggleSidebar()">menu</mat-icon>
+    <span class="spacer"></span>
+    <mat-label class="settings-icon unselectable">Admin</mat-label>
+    <mat-icon class="settings-icon unselectable" (click)="showCount()" [matBadge]="notificationCount" [matBadgeHidden]="notificationCountVisibility === false" matBadgeColor="accent" [matMenuTriggerFor]="notificationsMenu">notifications</mat-icon>
+    <mat-menu  #notificationsMenu="matMenu" class="notifications"  style="max-width: 100% !important;padding-top: 10px;font-size: 14px;">
+        <mat-nav-list *ngFor="let notification of notificationData; let i=index" style="padding-top: 0px;" class="custom-noti border-bottom" (click)="onNotificationClick(notification)">
+          <mat-label class="d-block border-0" style="font-size: 12px;">{{notification.message}}</mat-label>
+          <mat-label class="d-block border-0 text-right" style="font-size: 10px;">{{notification.created_at | date : 'M/d/yy, h:mm a' }}</mat-label>
+        </mat-nav-list>
+        <span class="d-block border-0 text-right" *ngIf="notificationData.length" style="font-size: 13px;cursor: pointer;padding-top: 7px;" [routerLink]="['/notification/list']">Show All</span>
+        <span class="d-block border-0 text-right" *ngIf="!notificationData.length" style="font-size: 13px;cursor: pointer;" [routerLink]="['/notification/list']">No Notifications</span>
+        <!-- <mat-label *ngFor="let notification of notificationData">{{notification.message}}</mat-label> -->
+    </mat-menu>
+    <mat-icon class="settings-icon unselectable" [matMenuTriggerFor]="settingsMenu">settings</mat-icon>
+    <mat-menu #settingsMenu="matMenu" class="settings">
+      <button mat-menu-item [routerLink]="['/logout']">Logout</button>
+    </mat-menu>
+  </mat-toolbar>
+  <mat-sidenav-container  [ngClass]="{'login': currentRoute === '/login'}" [ngStyle]="{'margin-top.px': currentRoute==='/login'? 0 : 50}">
+    <mat-sidenav *ngIf="currentRoute!=='/login'" #drawer mode="side" opened role="navigation" position="start" [@openClose]="isSideNavOpened ? 'open' : 'closed'">
+      <mat-nav-list>
+        <ul class="sidebar-menu pl-0" [ngClass]="{'in': !isSideNavOpened}">
+          <ng-container *ngFor="let outer of menu">
+          <li [ngClass]="{ 'open': outer?.hasSubMenu === true}"  class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+            <a mat-list-item (click)="toggleSubMenu(outer)" class="nav-link d-flex align-items-center" [ngClass]="{'active': outer['isActive']=== true}" *ngIf="outer['menu_item_list'] !== undefined">
+              <!-- <mat-icon class="sidebar-icon"  *ngIf="outer['isActive'] !== true">{{outer.icon}}</mat-icon> -->
+              <!-- <mat-icon class="sidebar-icon"  *ngIf="outer['isActive'] === true">{{outer.icon_active}}</mat-icon> -->
+
+              <svg width='20px' height='20px' version='1.1' *ngIf="outer['isActive'] !== true" xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+                <image [attr.xlink:href]='outer.icon' height='20px' width='20px' />
+              </svg>
+              <svg width='20px' height='20px' version='1.1' *ngIf="outer['isActive'] === true" xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+                <image [attr.xlink:href]='outer.icon_active' height='20px' width='20px' />
+              </svg>
+
+              <mat-label class="linkText">{{outer.menu_name}}</mat-label>
+              <mat-icon [ngClass]="{'add-icon custom-arrow down-arrow' : outer?.menu_item_list !== undefined }" *ngIf="outer['menu_item_list'] !== undefined">keyboard_arrow_down</mat-icon>
+              <mat-icon [ngClass]="{'min-icon custom-arrow up-arrow' : outer?.menu_item_list }" *ngIf="outer['menu_item_list'] !== undefined">keyboard_arrow_up</mat-icon>
+            </a>
+            <a mat-list-item (click)="toggleSubMenu(outer)" class="nav-link d-flex align-items-center" [ngClass]="{'active': outer['isActive']===true}" [routerLink]='outer?.link' *ngIf="outer['menu_item_list'] === undefined" >
+                <!-- <mat-icon class="sidebar-icon"  *ngIf="outer['isActive'] !== true">{{outer.icon}}</mat-icon> -->
+              <!-- <mat-icon class="sidebar-icon"  *ngIf="outer['isActive'] === true">{{outer.icon_active}}</mat-icon> -->
+
+              <svg width='20px' height='20px' version='1.1' *ngIf="outer['isActive'] !== true" xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+                <image [attr.xlink:href]='outer.icon' height='20px' width='20px' />
+              </svg>
+              <svg width='20px' height='20px' version='1.1' *ngIf="outer['isActive'] === true" xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+                <image [attr.xlink:href]='outer.icon_active' height='20px' width='20px' />
+              </svg>
+
+              <mat-label class="linkText">{{outer.menu_name}}</mat-label>
+              <mat-icon [ngClass]="{'add-icon custom-arrow down-arrow' : outer?.menu_item_list !== undefined }" *ngIf="outer['menu_item_list'] !== undefined">keyboard_arrow_down</mat-icon>
+              <mat-icon [ngClass]="{'min-icon custom-arrow up-arrow' : outer?.menu_item_list }" *ngIf="outer['menu_item_list'] !== undefined">keyboard_arrow_up</mat-icon>
+              </a>
+            <ul class="sub-menu pl-0" [ngClass]="{ 'open': outer.hasSubMenu === true}" *ngIf="outer['menu_item_list'] !== undefined">
+              <ng-container *ngFor="let inner of outer['menu_item_list']">
+                <li>
+                  <a mat-list-item class="nav-link d-flex align-items-center sub-link" [routerLink]='inner?.link' routerLinkActive="active">
+                    <mat-label class="sub-text">{{inner?.menu_item_name}}</mat-label>
+                  </a>
+                </li>
+              </ng-container>
+            </ul>
+          </li>
+          </ng-container>
+        </ul>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content [ngClass]="{'notlOGIN': currentRoute!=='/login', 'panelClose': isSideNavOpened}" role="region" [@panelClose]="isSideNavOpened ? 'open' : 'closed'">
+      <div [ngClass]="{'workspace': currentRoute!=='/login'}">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

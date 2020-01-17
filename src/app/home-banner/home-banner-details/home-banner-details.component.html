@@ -1,0 +1,72 @@
+<section class="custom-ads-details-section custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/custom-ads/list']">Home Banner</a>
+    </mat-label>
+    <mat-label>></mat-label>
+    <mat-label *ngIf="path === 'add'">Add </mat-label>
+    <mat-label *ngIf="path === 'edit'">Edit </mat-label>
+    <mat-label *ngIf="path === 'view'">View </mat-label>
+  </mat-nav-list>
+
+
+  <form #homeBannerDataForm="ngForm"  (ngSubmit)="crudHomeBanner(homeBannerDataForm.valid)" novalidate class="custom-form-padding">
+
+    <div class="row">
+
+      <div class="col-12 col-sm-6 col-md-6">
+
+        <mat-form-field>
+          <input matInput placeholder="Title"  type="text" name="title" minlength="2" [(ngModel)]="homeBannerData['title']"  required
+            autocomplete="off" maxlength="100"  pattern="^\S$|^\S[\s\S]*$" #event="ngModel" [disabled]="path === 'view'">
+          <mat-error *ngIf="event?.errors?.required">
+            Title is required
+          </mat-error>
+          <mat-error *ngIf="event?.errors?.pattern && !event?.errors.minlength">
+            Invalid title format
+          </mat-error>
+          <mat-error *ngIf="event?.errors?.minlength">
+              Mimimum 2 characters
+            </mat-error>
+        </mat-form-field>
+
+
+
+      </div>
+      <div class="col-12">
+        <div class="upload-photo-wrapper d-flex">
+          <label class="custom-label" *ngIf="path ==='view'">Uploaded Banner:</label>
+          <div class='upload-btn ml-2 mr-auto' *ngIf="path!=='view'">
+            <input type='file' #uploadImageInput accept=".png, .jpg, .jpeg" name="image" id='upload-image1'
+              class='upload-input' (change)="fileUploads($event)" />
+            <label class='mb-0 upload-text d-flex align-items-center' for='upload-images'>
+              <button>Upload banner</button>
+            </label>
+            <mat-error style="font-size: small" *ngIf="!homeBannerData.imageUrl && isSubmited">
+                Image is required
+              </mat-error>
+          </div>
+          <div class="upload-img" *ngIf="homeBannerData?.imageUrl">
+            <img [src]="homeBannerData.imageUrl" alt="location-img">
+          </div>
+          <label class="d-flex align-items-center mb-0 mt-2" *ngIf="!homeBannerData.imageUrl && path === 'view'">
+            NA
+          </label>
+        </div>
+      </div>
+    </div>
+<div class="post-btn">
+  <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='add'">Submit</button>
+  <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='edit'">Update</button>
+  <button mat-raised-button type="button" color="warn" *ngIf="path==='add' || path==='edit'" class="add-btn"
+    [routerLink]="['/home-banner/list']">Cancel</button>
+  <button mat-raised-button type="button" color="warn" *ngIf="path==='view'" class="add-btn"
+    [routerLink]="['/home-banner/list']">Close</button>
+</div>
+
+
+  </form>
+</section>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,28 @@
+.service-detail-section{
+  ul{
+    li{
+      padding: 5px 0;
+      border-bottom: 0.55px solid #ccc;
+      label.question{
+        margin-bottom: 0;
+        font : {
+          size: 14px;
+        }
+        color: rgba(0, 0, 0, 0.54);
+      }
+      label.answer{
+        margin-bottom: 0;
+        color: rgba(0, 0, 0, 1);
+        font : {
+          size: 16px;
+        }
+      }
+    }
+    & .custom-list{
+      list-style: none;
+      li{
+        border-bottom:none;
+      }
+    }
+  }
+}

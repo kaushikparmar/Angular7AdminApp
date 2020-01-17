@@ -1,0 +1,277 @@
+<div class="pb-user-list-component custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/user']">User</a>
+    </mat-label>
+    <mat-label>></mat-label>
+    <mat-label>List</mat-label>
+  </mat-nav-list>
+  <div class="pb-table-wraper">
+    <div class="filter-section" [class.opened]="searchPanel" >
+      <form #searchUser="ngForm" novalidate (submit)="getUsers()">
+        <div class="listing-form d-flex justify-content-between align-items-center">
+          <div class="search-box">
+            <mat-form-field class="mat-form-field">
+              <mat-label>Search</mat-label>
+              <input matInput name="search" [(ngModel)]="tableConfig.searchString" />
+              <!--
+            <mat-error *ngIf="login_id.hasError('required')">
+              Login ID is <strong>required</strong>
+            </mat-error>
+          -->
+              <!-- <mat-icon class="settings-icon unselectable">search</mat-icon> -->
+            </mat-form-field>
+            <button mat-raised-button type="submit" color="primary" class="search-btn">Search</button>
+
+          </div>
+
+          <div class="right-side-btn d-flex align-items-center">
+            <div class="filter-btn">
+              <button mat-raised-button color="primary" type="button" class="filter-list-icon"
+                      (click)="searchPanel = !searchPanel">
+                Filter
+              </button>
+            </div>
+          </div>
+
+        </div>
+        <div class="advanced-search-form">
+          <form class="search-form-padding">
+            <div class="row">
+              <div class="col-12 col-sm-6 col-md-4">
+                <mat-form-field>
+                  <mat-label>Full Name</mat-label>
+                  <input matInput [(ngModel)]="filterName" name="filterName" />
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4">
+                <mat-form-field>
+                  <mat-label>Email</mat-label>
+                  <input matInput [(ngModel)]="filterEmail" name="filterEmail" />
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4">
+                <mat-form-field>
+                  <mat-label>User Type</mat-label>
+                  <mat-select value="0" [(ngModel)]="filterType" name="filterType">
+                    <mat-option value="0">
+                      Select User Type
+                    </mat-option>
+                    <mat-option value="1">
+                      Pet Owner
+                    </mat-option>
+                    <mat-option value="2">
+                      Service Provider
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <!--<div class="col-12 col-sm-6 col-md-4">-->
+                <!--<mat-form-field>-->
+                  <!--<mat-label>Mobile</mat-label>-->
+                  <!--<input matInput [(ngModel)]="filterMobile" name="filterMobile" />-->
+                <!--</mat-form-field>-->
+              <!--</div>-->
+
+              <div class="col-12 col-sm-6 col-md-4">
+                <mat-form-field>
+                  <mat-label>Verified</mat-label>
+                  <mat-select value="" [(ngModel)]="filterVerified" name="filterVerified">
+                    <mat-option value="">
+                      Select Verified
+                    </mat-option>
+                    <mat-option value="true">
+                      Yes
+                    </mat-option>
+                    <mat-option value="false">
+                      No
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4">
+                <mat-form-field>
+                  <mat-label>Admin Verified</mat-label>
+                  <mat-select value="" [(ngModel)]="filterAdminVerified" name="filterAdminVerified">
+                    <mat-option value="">
+                      Select Admin Verified
+                    </mat-option>
+                    <mat-option value="Yes">
+                      Yes
+                    </mat-option>
+                    <mat-option value="No">
+                      No
+                    </mat-option>
+                    <mat-option value="NA">
+                      NA
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4">
+                <mat-form-field>
+                  <mat-label>Status</mat-label>
+                  <mat-select value="" [(ngModel)]="filterStatus" name="filterStatus">
+                    <mat-option value="">
+                      Select Status
+                    </mat-option>
+                    <mat-option value="true">
+                      Active
+                    </mat-option>
+                    <mat-option value="false">
+                      Deactive
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+            </div>
+            <div class="advanced-search-btn">
+              <button mat-raised-button type="submit" color="primary" class="search-btn" (click)="getUsers();">Search</button>
+              <button mat-raised-button type="button" color="warn" class="clear-btn" (click)="clearFilter();">Clear</button>
+            </div>
+          </form>
+        </div>
+      </form>
+    </div>
+    <div class="pb-table">
+      <div class="mat-elevation-z8">
+        <!--
+          <mat-form-field class="mat-form-field">
+            <mat-label>Search</mat-label>
+            <input matInput name="search">
+          </mat-form-field>
+        -->
+        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Full Name</th>
+            <td mat-cell *matCellDef="let user" class="text-capitalize">
+              <span *ngIf="user.name">{{user.name}}</span>
+              <span *ngIf="!user.name">-</span>
+            </td>
+          </ng-container>
+
+          <!-- Position Column -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="email">Email</th>
+            <td mat-cell *matCellDef="let user">
+              <span *ngIf="user.email">{{user.email}}</span>
+              <span *ngIf="!user.email">-</span>
+            </td>
+          </ng-container>
+
+          <!-- Height Column -->
+          <ng-container matColumnDef="mobile">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="mobile">Mobile</th>
+            <td mat-cell *matCellDef="let user">
+              <span *ngIf="user.mobile">{{user.mobile}}</span>
+              <span *ngIf="!user.mobile">-</span>
+            </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="is_verified">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="is_verified">Verified</th>
+            <td mat-cell *matCellDef="let user">
+              <span *ngIf="user.is_verified">Yes</span>
+              <span *ngIf="!user.is_verified">No</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="admin_verified">
+            <th mat-header-cell *matHeaderCellDef>Admin Verified</th>
+            <td mat-cell *matCellDef="let user">
+              <span *ngIf="user.admin_verified === 'Yes'">Yes</span>
+              <span *ngIf="user.admin_verified === 'No'">No</span>
+              <span *ngIf="user.admin_verified === 'NA'">NA</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="is_active">Status</th>
+            <td mat-cell *matCellDef="let user">
+              <span *ngIf="user.is_active">Active</span>
+              <span *ngIf="!user.is_active">Deactive</span>
+            </td>
+          </ng-container>
+
+          <!-- User Type -->
+          <ng-container matColumnDef="user_type">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="type">User Type</th>
+            <td mat-cell *matCellDef="let user" class="text-capitalize">
+              <span *ngIf="user?.fk_user_role?.type">{{user['fk_user_role']['type']}}</span>
+              <span *ngIf="!user?.fk_user_role?.type">-</span>
+            </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <!-- <ng-container matColumnDef="is_active">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Active</th>
+            <td mat-cell *matCellDef="let user">
+              <span *ngIf="user.is_active === 1">Yes</span>
+              <span *ngIf="user.is_active !== 1">No</span>
+            </td>
+          </ng-container> -->
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="created_on">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="created_on">Created On</th>
+            <td mat-cell *matCellDef="let user">{{ user.created_on | date: 'MM-dd-yyyy' }}</td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="updated_on">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="updated_on">Updated On</th>
+            <td mat-cell *matCellDef="let user">{{ user.updated_on | date: 'MM-dd-yyyy' }}</td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <!-- <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Zipcode</th>
+            <td mat-cell *matCellDef="let user">
+              <button mat-raised-button color="primary" *ngIf="user.status">Activate</button>
+              <button mat-raised-button color="warn" *ngIf="!user.status">Deactive</button>
+            </td>
+          </ng-container> -->
+          <!-- Star Column -->
+          <ng-container matColumnDef="is_active">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let user">
+              <mat-menu #appMenu="matMenu">
+                <button mat-menu-item *ngIf="user.is_active === false" 
+                  (click)="openDialog(user, 'Active');">Active</button>
+                <button mat-menu-item *ngIf="user.is_active === true"
+                  (click)="openDialog(user, 'Deactive');">Deactive</button>
+                <button mat-menu-item
+                  *ngIf="(user.admin_verified === 'NA' || user.req_for_provider === true) && user.is_verified === true && user.answers && user.answers.length > 0"
+                  (click)="openDialog(user, 'Approve');">Approve</button>
+                <!-- <button mat-menu-item *ngIf="user['fk_user_role.type'] === 'service-provider' && user.admin_verified === 'NotNeeded'" (click)="approveRejectUser(user, 'Reject')">Reject</button> -->
+                <!-- <button mat-menu-item *ngIf="user.is_active === 1">Edit</button>
+                <button mat-menu-item *ngIf="user.is_active === 1">Delete</button> -->
+              </mat-menu>
+              <button mat-icon-button [matMenuTriggerFor]="appMenu"
+                (click)="$event.preventDefault(); $event.stopPropagation()">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="view(row)"></tr>
+          <!--(click)="edit(row)"-->
+        </table>
+        <div class="no-records" *ngIf="TABLE_DATA?.length === 0">
+          No records found
+        </div>
+
+        <mat-paginator class="mat-paginator-sticky" [length]="tableConfig.totalRecords" [pageSizeOptions]="[10, 20, 30]"
+          showFirstLastButtons (page)="pageChanged($event)"></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

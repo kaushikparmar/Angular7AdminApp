@@ -1,0 +1,68 @@
+<div class="custom-padding pb-lost-found-details-component">
+    <mat-nav-list class="custom-nav-list">
+        <mat-label>
+            <a [routerLink]="['/lost-and-found']">Lost & Found</a>
+        </mat-label>
+        <mat-label> > </mat-label>
+        <mat-label>Details</mat-label>
+    </mat-nav-list>
+    <div class="custom-form-padding">
+        <div class="row" *ngFor="let data of detailsData">
+            <div class="col-sm-6 details-section">
+                <!-- <button class="mb-3" mat-raised-button color="primary">{{data.type}}</button> -->
+                <mat-card class="cus-mat-card">
+                    <img mat-card-image class="details-image" *ngIf="data.image_url"
+                        src="{{originUrl}}/upload/{{data.image_url}}">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 text-center text-md-left">
+                            <div class="details">
+                                <span class="text-uppercase">Name:</span>
+                                <div>{{data.pet_name}}</div>
+                            </div>
+                            <div class="details">
+                                <span class="text-uppercase">Gender:</span>
+                                <div>{{data.gender}}</div>
+                            </div>
+                            <div class="details">
+                                <span class="text-uppercase">Breed:</span>
+                                <div>{{data.breed}}</div>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-12 col-md-6 text-center text-md-left">
+                            <div class="details">
+                                <span class="text-uppercase">Location:</span>
+                                <div>{{data.address}}</div>
+                            </div>
+                            <div class="details">
+                                <span class="text-uppercase">Pet Type:</span>
+                                <div>{{data.pet_type}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+            <div class="col-sm-6">
+                <h3 class="text-capitalize">{{data.type}} {{data.pet_type}}</h3>
+                <p class="des">{{data.description}}</p>
+                <h4>Contact Information</h4>
+                <div class="details">
+                    <span class="text-uppercase">Name:</span>
+                    <div>{{data.name}}</div>
+                </div>
+                <div class="details">
+                    <span class="text-uppercase">Email Id:</span>
+                    <div>{{data.email}}</div>
+                </div>
+                <div class="details">
+                    <span class="text-uppercase">Contact No:</span>
+                    <div>{{data.mobile}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="post-btn">
+            <button mat-raised-button type="button" color="warn" class="add-btn"
+                [routerLink]="['/lost-and-found']">Close</button>
+        </div>
+    </div>
+</div>

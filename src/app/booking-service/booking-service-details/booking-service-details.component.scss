@@ -1,0 +1,43 @@
+.pb-booking-service-details-component{
+    .round-img{
+        width:180px;
+        height: 180px;
+        border-radius: 50%;
+        border: 2px solid #00bcd4;
+    }
+    
+    .width-100{
+        width: 100px;;
+    }
+    
+    .line{
+        width: 70%;
+        height: 1px;
+        background: #888;
+    }
+
+    .cus-mat-card {
+        background: #eee;
+    }
+
+    .img-with-bg{
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        border: 2px solid #00bcd4;
+        margin: auto;
+        background-size: cover;
+    }
+
+    .details-image{
+        width: 50%;
+        display: block;
+        margin: auto;
+        margin-bottom: 15px;
+        height: auto;
+    }
+}
+
+
+
+

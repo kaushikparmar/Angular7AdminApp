@@ -1,0 +1,148 @@
+<div class="pb-contact-list-component custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/contact-us']">Contact Us</a>
+    </mat-label>
+    <mat-label>></mat-label>
+    <mat-label>List</mat-label>
+  </mat-nav-list>
+  <div class="pb-table-wraper">
+    <div class="filter-section" [class.opened]="searchPanel">
+      <form #searchUser="ngForm" (submit)="getContactList()">
+        <div class="listing-form d-flex justify-content-between align-items-center">
+          <div class="search-box">
+            <mat-form-field class="mat-form-field">
+              <mat-label>Search</mat-label>
+              <input matInput name="search" [(ngModel)]="tableConfig.searchString" />
+            </mat-form-field>
+            <button mat-raised-button type="submit" color="primary" class="search-btn">Search</button>
+          </div>
+          <div class="right-side-btn d-flex align-items-center">
+            <div class="filter-btn">
+              <button mat-raised-button color="primary" type="button" class="filter-list-icon" (click)="searchPanel = !searchPanel">
+                Filter
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="advanced-search-form">
+          <form class="search-form-padding" #contactUsFilterForm="ngForm" novalidate>
+            <div class="row">
+              <div class="col-12 col-sm-6 col-md-4">
+                <mat-form-field>
+									<mat-label>Topic</mat-label>
+									<mat-select value="Select Topic" [(ngModel)]="filterTopic" name="filterTopic">
+										<mat-option value="Select Topic">
+											Select Topic
+										</mat-option>
+										<mat-option *ngFor="let option of topicOptions" [value]="option?.id">
+											{{option?.name | titlecase}}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4">
+                <mat-form-field>
+                    <mat-label>Choose a startdate</mat-label>
+                  <input matInput [matDatepicker]="picker1" [(ngModel)]="startDate" (ngModelChange)="changeStartDate();" name="startdate" disabled>
+                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1 disabled="false"></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4">
+                <mat-form-field>
+                    <mat-label>Choose a enddate</mat-label>
+                  <input matInput [matDatepicker]="picker2" [min]="startDate" [(ngModel)]="endDate" name="enddate" disabled>
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2 disabled="false"></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="advanced-search-btn">
+              <button mat-raised-button type="submit" color="primary" class="search-btn" (click)="filterSearch();">Search</button>
+              <button mat-raised-button type="button" color="warn" class="clear-btn" (click)="filterClear();">Clear</button>
+            </div>
+          </form>
+        </div>
+      </form>
+    </div>
+    <div class="pb-table">
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="topic">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="id">Topic</th>
+            <td mat-cell *matCellDef="let contact">
+              <span *ngIf="contact?.category['name']">{{contact?.category['name']}}</span>
+              <span *ngIf="!contact?.category['name']">-</span>
+            </td>
+          </ng-container>
+
+          <!-- Position Column -->
+          <ng-container matColumnDef="recieved_on">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="created_at">Recieved On</th>
+            <td mat-cell *matCellDef="let contact">
+              <span *ngIf=" contact.created_at">{{contact.created_at | date: 'dd/MM/yyyy'}}</span>
+              <span *ngIf="!contact.created_at">-</span>
+            </td>
+          </ng-container>
+
+          <!-- Height Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="name">User Name</th>
+            <td mat-cell *matCellDef="let contact">
+              <span *ngIf="contact.name">{{contact.name}}</span>
+              <span *ngIf="!contact.name">-</span>
+            </td>
+          </ng-container>
+
+
+
+          <ng-container matColumnDef="email_id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="email">Email Id</th>
+            <td mat-cell *matCellDef="let contact">
+              <span *ngIf="contact['email']">{{contact['email']}}</span>
+              <span *ngIf="!contact['email']">-</span>
+            </td>
+          </ng-container>
+
+
+
+          <!-- <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+              <td mat-cell *matCellDef="let contact">
+                <span *ngIf="contact['message']">{{contact['message']}}</span>
+                <span *ngIf="contact['message']">-</span>
+              </td>
+          </ng-container> -->
+
+          <ng-container matColumnDef="is_active">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let user">
+              <mat-menu #appMenu="matMenu">
+                <button mat-menu-item (click)="view(user)">View</button>
+              </mat-menu>
+              <button mat-icon-button [matMenuTriggerFor]="appMenu"
+                (click)="$event.preventDefault(); $event.stopPropagation()">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="view(row)"></tr>
+        </table>
+        <div class="no-records" *ngIf="TABLE_DATA?.length === 0">
+          No records found
+        </div>
+
+        <mat-paginator class="mat-paginator-sticky" [length]="tableConfig.totalRecords" [pageSizeOptions]="[10, 20, 30]"
+          showFirstLastButtons (page)="pageChanged($event)"></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

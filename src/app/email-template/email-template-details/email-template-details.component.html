@@ -1,0 +1,90 @@
+<section class="emailTemplate-details-section custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/emailTemplate']">Email Template</a>
+    </mat-label>
+    <mat-label>></mat-label>
+    <mat-label *ngIf="path === 'add'">Add </mat-label>
+    <mat-label *ngIf="path === 'edit'">Edit </mat-label>
+    <mat-label *ngIf="path === 'view'">View </mat-label>
+  </mat-nav-list>
+
+
+  <form #emailTemplateForm="ngForm" novalidate (ngSubmit)="crudEmailTemplate(emailTemplateForm.valid)"
+    class="custom-form-padding">
+
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Email Key" [disabled]="path ==='view' || path ==='edit'" pattern="^[a-zA-Z][a-zA-Z0-9\s]+$"
+            minlength="2" maxlength="250" required name="emailKey" #emailKey="ngModel"
+            [(ngModel)]="emailTemplateData.email_key" disabled="true">
+          <mat-error
+            *ngIf="emailKey?.errors?.pattern && (emailKey.dirty || emailKey.touched  || isSubmited) && !emailKey?.errors?.minlength">
+            Invalid email key
+          </mat-error>
+          <mat-error
+            *ngIf="emailKey?.errors?.required && (emailKey.dirty || emailKey.touched  || isSubmited)">
+            Email key is required
+          </mat-error>
+          <mat-error
+            *ngIf="emailKey?.errors?.minlength && (emailKey?.dirty || emailKey?.touched  || isSubmited)">
+            Minimum 2 characters
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Email Subject" [disabled]="path==='view'" pattern="^\S$|^\S[\s\S]*$"
+            minlength="2" maxlength="250" required name="parentTopic" #emailSubject="ngModel"
+            [(ngModel)]="emailTemplateData.subject">
+          <mat-error
+            *ngIf="emailSubject?.errors?.pattern && (emailSubject?.dirty || emailSubject?.touched  || isSubmited) && !emailSubject?.errors?.minlength">
+            Invalid subject name
+          </mat-error>
+          <mat-error
+            *ngIf="emailSubject?.errors?.required && (emailSubject.dirty || emailSubject.touched  || isSubmited)">
+            Subject name is required
+          </mat-error>
+          <mat-error
+            *ngIf="emailSubject?.errors?.minlength && (emailSubject.dirty || emailSubject.touched  || isSubmited)">
+            Minimum 2 characters
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-12">
+        <label class="custom-label">{{path !== 'view' ? 'Email Body*' :'Email Body' }}</label>
+
+        <quill-editor [style]="{height: '250px'}" style="margin-top: 10px" name="content" [(ngModel)]="emailTemplateData.email"
+        pattern="^\S$|^\S[\s\S]*$" *ngIf="path !== 'view'" required #content="ngModel"  (input)="isDescriptionInvalid = false"></quill-editor>
+          <div class="view-content-div" *ngIf="path === 'view'" [innerHTML]="emailTemplateData.email">
+
+            </div>
+            <div  *ngIf="path === 'view' && !emailTemplateData.email">NA</div>
+          <span *ngIf="path !== 'view'">
+            <mat-error style="font-size: 13px" *ngIf="!emailTemplateData.email && isDescriptionInvalid">
+              Email body is required
+            </mat-error>
+          </span>
+         <mat-error style="font-size: 13px" *ngIf="emailTemplateData.email && isDescriptionInvalid">
+            Invalid email body format
+         </mat-error>
+
+      </div>
+
+
+    <div class="post-btn">
+      <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='add'">Submit</button>
+      <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='edit'">Update</button>
+      <button mat-raised-button type="button" color="warn" *ngIf="path==='add' || path==='edit'" class="add-btn"
+        [routerLink]="['/email-template/list']">Cancel</button>
+      <button mat-raised-button type="button" color="warn" *ngIf="path==='view'" class="add-btn"
+        [routerLink]="['/email-template/list']">Close</button>
+    </div>
+</div>
+  </form>
+</section>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

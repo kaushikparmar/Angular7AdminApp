@@ -1,0 +1,228 @@
+<div class="pb-faq-list custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/faq']">Custom-Ads</a>
+    </mat-label>
+    <mat-label>></mat-label>
+
+    <mat-label>List</mat-label>
+  </mat-nav-list>
+  <div class="pb-table-wraper">
+    <div class="filter-section"  [class.opened]="searchPanel" >
+      <form #searchFaq="ngForm" (submit)="getCustomAdsList()">
+        <!-- <div class="listing-form d-flex justify-content-between align-items-center">
+          <div class="search-box">
+            <mat-form-field class="mat-form-field">
+              <mat-select placeholder="Select Section"  name="searchsection"
+              [(ngModel)]="tableConfig.section"  (selectionChange)="getCustomAdsList()" >
+                <mat-option *ngFor="let subtopic of sectionData" [value]="subtopic.name">
+                  {{subtopic.type}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="mat-form-field ml-3">
+              <mat-select placeholder="Select Status"  name="selectpublished"
+              [(ngModel)]="tableConfig.isPublished"  (selectionChange)="getCustomAdsList()" >
+              <mat-option  value=''>
+                  All
+                </mat-option>
+              <mat-option  value=true>
+                  Published
+                </mat-option>
+                <mat-option  value=false>
+                  UnPublished
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="add-div">
+            <button mat-raised-button  color="primary" class="add-btn" [routerLink]="['/custom-ads/add']">Add
+              Custom-Ads</button>
+          </div>
+        </div> -->
+        <div class="listing-form d-flex justify-content-between align-items-center">
+            <div class="search-box">
+              <mat-form-field class="mat-form-field">
+                <mat-label>Search</mat-label>
+                <input matInput name="search" [(ngModel)]="tableConfig.searchString" />
+              </mat-form-field>
+              <button mat-raised-button type="submit" color="primary" class="search-btn">Search</button>
+            </div>
+            <div class="right-side-btn d-flex align-items-center">
+              <div class="add-div">
+                <button mat-raised-button [routerLink]="['/custom-ads', 'add']" color="primary" class="add-btn">Add Custom Adds</button>
+              </div>
+              <div class="filter-btn">
+                <button mat-raised-button color="primary" type="button" class="filter-list-icon"
+                        (click)="searchPanel = !searchPanel">Filter
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="advanced-search-form">
+          <form class="search-form-padding">
+            <div class="row">
+
+              <div class="col-12 col-sm-6 col-md-4">
+                <mat-form-field>
+                  <mat-label>Section</mat-label>
+                  <mat-select value="Select Section" [(ngModel)]="filterVerified" name="filterVerified">
+                    <mat-option value="">
+                      Select Section
+                    </mat-option>
+                    <mat-option value="blog">
+                      Blog
+                    </mat-option>
+                    <mat-option value="press">
+                      Press
+                    </mat-option>
+                    <mat-option value="search">
+                      Search
+                    </mat-option>
+                    <mat-option value="social_media">
+                      Social Media
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4">
+                <mat-form-field>
+                  <mat-label>Status</mat-label>
+                  <mat-select value="Select Type" [(ngModel)]="filterStatus" name="filterStatus">
+                    <mat-option value="Select Type">
+                      Select Status
+                    </mat-option>
+                    <mat-option value="true">
+                      Published
+                    </mat-option>
+                    <mat-option value="false">
+                      UnPublished
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4"></div>
+            </div>
+            <div class="row">
+              <div class="col-12 col-sm-6 col-md-4">
+                <mat-form-field>
+									<mat-label>Choose a startdate</mat-label>
+										<input matInput [matDatepicker]="picker1" [(ngModel)]="startDate" (ngModelChange)="changeStartDate();" name="startdate" disabled>
+										<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+										<mat-datepicker #picker1 disabled="false"></mat-datepicker>
+								</mat-form-field>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4">
+                <mat-form-field>
+									<mat-label>Choose a enddate</mat-label>
+									<input matInput [matDatepicker]="picker2" [min]="startDate" [(ngModel)]="endDate" name="enddate" disabled>
+									<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+									<mat-datepicker #picker2 disabled="false"></mat-datepicker>
+								</mat-form-field>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4"></div>
+            </div>
+            <div class="advanced-search-btn">
+              <button mat-raised-button type="submit" color="primary" class="search-btn" (click)="filterSearch();">Search</button>
+              <button mat-raised-button type="button" color="warn" class="clear-btn" (click)="clearFilter();">Clear</button>
+            </div>
+          </form>
+        </div>
+      </form>
+    </div>
+    <div class="pb-table">
+      <div class="mat-elevation-z8">
+
+        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+          <!-- Banner Image -->
+
+          <!-- Symbol Column-->
+          <ng-container matColumnDef="banner">
+            <th mat-header-cell *matHeaderCellDef>Banner</th>
+            <td mat-cell *matCellDef="let ads">
+              <div class="lookupimage-box-box" *ngIf="ads.banner" style="height:70px;width:80px;padding:10px">
+                <img src="{{environmentImageSource?.origin}}/upload/{{ads?.banner}}" style="height:100%;width:100%;">
+              </div>
+              <div class="lookupimage-box-box" *ngIf="!ads.banner" style="height:70px;width:80px;padding:10px">
+                <img src="./assets/no-image.png" style="height:100%;width:100%;">
+              </div>
+            </td>
+          </ng-container>
+
+
+
+          <!-- Section Column -->
+          <ng-container matColumnDef="section">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="section">Section</th>
+            <td mat-cell *matCellDef="let ads">
+              <span *ngIf="ads?.section">{{ads?.section}}</span>
+              <span *ngIf="!ads?.section">-</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="isPublished">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="is_published">Status</th>
+            <td mat-cell *matCellDef="let ads">
+              <span *ngIf="ads.is_published === 0">Unpublished</span>
+              <span *ngIf="ads.is_published === 1">Published</span>
+            </td>
+          </ng-container>
+          <!-- Created at Column -->
+          <ng-container matColumnDef="from_date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="from_date">From Date</th>
+            <td mat-cell *matCellDef="let ads" >
+              <span *ngIf="ads?.from_date">{{ ads.from_date | date: 'MM-dd-yyyy' }}</span>
+              <span *ngIf="!ads?.from_date">-</span>
+            </td>
+
+          </ng-container>
+
+          <!-- Created By Column -->
+          <ng-container matColumnDef="to_date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="to_date">To Date</th>
+            <td mat-cell *matCellDef="let ads">
+                <span *ngIf="ads?.to_date">{{ ads.to_date | date: 'MM-dd-yyyy' }}</span>
+                <span *ngIf="!ads?.to_date">-</span>
+            </td>
+          </ng-container>
+
+
+
+
+          <!-- Star Column -->
+          <ng-container matColumnDef="menu">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let ads">
+              <mat-menu #appMenu="matMenu">
+                <button mat-menu-item (click)="viewDetail(ads)">View</button>
+                <button mat-menu-item (click)="edit(ads)">Edit</button>
+
+                <button mat-menu-item *ngIf="ads.is_published === 0"
+                (click)="openDialog(ads)">Publish</button>
+              <button mat-menu-item *ngIf="ads.is_published === 1"
+                (click)="openDialog(ads)">Unpublish</button>
+            </mat-menu>
+
+              <button mat-icon-button [matMenuTriggerFor]="appMenu"
+                (click)="$event.preventDefault(); $event.stopPropagation()">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="viewDetail(row)"></tr>
+        </table>
+        <div class="no-records" *ngIf="TABLE_DATA?.length === 0">
+          No records found
+        </div>
+
+        <mat-paginator class="mat-paginator-sticky" [length]="tableConfig.totalRecords" [pageSizeOptions]="[10, 20, 30]"
+          showFirstLastButtons (page)="pageChanged($event)"></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

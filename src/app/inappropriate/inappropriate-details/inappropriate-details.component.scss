@@ -1,0 +1,28 @@
+.pb-inappropriate-details-component{
+    .details {
+      margin-bottom: 10px;
+  }
+  
+  .des {
+      height: 150px;
+      width: 100%;
+      word-break: break-all;
+      max-height: 150px;
+      overflow: auto;
+  }
+  
+  .details-image{
+      // max-height: 170px;
+      width: 50%;
+      display: block;
+      margin: auto;
+      margin-bottom: 15px;
+      height: auto;
+    }
+  
+    .cus-mat-card {
+      background: #eee;
+    }
+  }
+  
+  

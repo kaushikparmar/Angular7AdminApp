@@ -1,0 +1,152 @@
+<section class="user-profile-section">
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Profile Details
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="row">
+        <div class="col-12 col-sm-6 col-md-6">
+          <mat-form-field>
+            <input matInput placeholder="Name" type="text" name="Name" disabled value="{{currentProfileDetails.name}}">
+            <span *ngIf="!currentProfileDetails.name">-</span>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6">
+          <mat-form-field>
+            <input matInput placeholder="Phone" type="text" name="phone" disabled value="{{currentProfileDetails.mobile}}">
+            <span *ngIf="!currentProfileDetails.mobile">-</span>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6">
+          <mat-form-field>
+            <input matInput placeholder="Date of Birth" type="text" name="dob" disabled value="{{currentProfileDetails.dob}}">
+            <span *ngIf="!currentProfileDetails.dob">-</span>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6">
+          <mat-form-field>
+            <input matInput placeholder="Email" type="email" name="email" disabled value="{{currentProfileDetails.email}}">
+            <span *ngIf="!currentProfileDetails.email">-</span>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6">
+          <mat-form-field>
+            <mat-select placeholder="Gender" value="{{currentProfileDetails.gender}}" disabled>
+              <mat-option value="Male">Male</mat-option>
+              <mat-option value="Female">Female</mat-option>
+            </mat-select>
+            <span *ngIf="!currentProfileDetails.gender">-</span>
+          </mat-form-field>
+        </div>
+
+<div class="col-12">
+  <div class="row">
+      <div class="col-12 col-sm-6 col-md-6">
+          <div class="upload-photo-wrapper d-flex">
+            <label class="custom-label">Profile Pic:</label>
+            <div class="upload-img">
+              <img src="{{environment.origin}}/upload/{{currentProfileDetails?.user_detail?.profile_pic}}" style="height:100%;">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-6">
+          <label class="custom-label">Cover Pic:</label>
+          <div class="upload-img">
+            <img src="{{environment.origin}}/upload/{{currentProfileDetails?.user_detail?.cover_pic}}" alt="" style="height:250px; width: 100%" >
+          </div>
+        </div>
+  </div>
+</div>
+
+      </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Address Details
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="row">
+        <div class="col-12 col-sm-6 col-md-6">
+          <mat-form-field>
+            <textarea cdkTextareaAutosize cdkAutosizeMinRows="3" placeholder="Address Line 1" cdkAutosizeMaxRows="5"
+              matInput disabled name="address1"
+              value="{{currentProfileDetails.address1}}">
+            </textarea>
+            <span *ngIf="!currentProfileDetails.address1">-</span>
+            <!-- <label class="d-flex align-items-center mb-0 mt-2" *ngIf="!customAdsData.notes   && path === 'view'">
+                              NA
+                            </label> -->
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6">
+          <mat-form-field>
+            <textarea cdkTextareaAutosize cdkAutosizeMinRows="3" placeholder="Address Line 2" cdkAutosizeMaxRows="5"
+              matInput disabled name="address2"
+              value="{{currentProfileDetails.address2}}">
+            </textarea>
+            <span *ngIf="!currentProfileDetails.address2">-</span>
+            <!-- <label class="d-flex align-items-center mb-0 mt-2" *ngIf="!customAdsData.notes   && path === 'view'">
+                                NA
+                              </label> -->
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6">
+          <mat-form-field>
+            <input matInput placeholder="City" type="text" name="city" disabled value="{{currentProfileDetails.city}}">
+            <span *ngIf="!currentProfileDetails.city">-</span>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6">
+          <mat-form-field>
+            <input matInput placeholder="State" type="text" name="state" disabled value="{{currentProfileDetails.state}}">
+            <span *ngIf="!currentProfileDetails.state">-</span>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6">
+          <mat-form-field>
+            <input matInput placeholder="Zipcode" type="number" name="zipcode" disabled value="{{currentProfileDetails.zipcode}}">
+            <span *ngIf="!currentProfileDetails.zipcode">-</span>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Photos
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="row">
+          <div class="col-12">
+              <!-- <label class="custom-label">Uploaded Photos:</label> -->
+              <!-- <div *ngIf="imagesRect.length === 0" class="info-msg w-100" style="text-align: center;margin-bottom: 20px;">
+                No photos available
+              </div> -->
+              <div class="my-app-custom-plain-container-row">
+                <ng-container *ngFor="let img of imagesRect; let i = index">
+                  <div *ngIf="i <= 5" class="custom-img-width custom-img-border">
+                    <a class="more" *ngIf="(imagesRect.length) >= 7" (click)="openImageModalRow1(img)">
+                      +{{imagesRect.length - 5 - 1}}
+                      more
+                    </a>
+                    <img class="my-app-custom-image-row"
+                      src="{{img.modal.img}}" (click)="openImageModalRow1(img)" />
+                    <ng-template #noThumb1>
+                      <img class="my-app-custom-image-row" [src]="img.modal.img" (click)="openImageModalRow1(img)" />
+                    </ng-template>
+                  </div>
+                </ng-container>
+              </div>
+              <ks-modal-gallery [id]="1" [modalImages]="imagesRect" [plainGalleryConfig]="customPlainGalleryRowConfig1">
+              </ks-modal-gallery>
+          <span *ngIf="!imagesRect.length">No Photos Available</span>
+          </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</section>
+

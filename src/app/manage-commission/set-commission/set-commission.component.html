@@ -1,0 +1,55 @@
+<div class="set-commission-container custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/manage-commission']">Manage Commission</a>
+    </mat-label>
+    <mat-label>></mat-label>
+    <mat-label>Set Commission</mat-label>
+  </mat-nav-list>
+  <form #UserForm="ngForm" (ngSubmit)="updateCommission(UserForm)" novalidate class="custom-form-padding">
+    <div class="row">
+      <div class="col-12 col-sm-4 col-md-4" >
+        <mat-form-field>
+          <mat-select placeholder="Select Commission Type" required name="commission_type" [(ngModel)]="is_fixed">
+            <mat-option value="true">
+             Fixed
+            </mat-option>
+            <mat-option value="false">
+              Percentage
+            </mat-option>
+          </mat-select>
+          <mat-error>
+            required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-sm-4 col-md-4">
+
+        <mat-form-field>
+          <input #fee="ngModel" matInput placeholder="Fees" pattern="\d+(\.\d{1,2})?" name="fees" maxlength="255" required
+            autocomplete="off"   [(ngModel)] = "fees">
+          <mat-error *ngIf="fee?.errors?.required">
+            Fees is required
+          </mat-error>
+          <mat-error *ngIf="fee?.errors?.pattern">
+            Must be a number
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+
+    <div class="post-btn">
+      <button mat-raised-button type="submit" color="primary" class="add-btn">Update</button>
+      <button mat-raised-button type="button" color="warn" class="add-btn"
+        [routerLink]="['/manage-commission']">Cancel</button>
+      <!-- <button mat-raised-button type="button" color="warn" class="add-btn"
+        [routerLink]="['/blog-category', 'blog-category-list']"
+        *ngIf="urlInfo.currentState === constants.viewRouteUrl">Close</button> -->
+    </div>
+  </form>
+
+</div>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

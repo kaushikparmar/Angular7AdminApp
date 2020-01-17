@@ -1,0 +1,132 @@
+<section class="cms-details-section custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/cms-pages/list']">Agreement</a>
+    </mat-label>
+    <mat-label>></mat-label>
+    <mat-label *ngIf="path === 'add'">Add </mat-label>
+    <mat-label *ngIf="path === 'edit'">Edit </mat-label>
+    <mat-label *ngIf="path === 'view'">View </mat-label>
+  </mat-nav-list>
+
+
+  <form #cmsForm="ngForm" novalidate (ngSubmit)="crudCms(cmsForm.valid)" class="custom-form-padding">
+
+    <div class="row">
+
+
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Name" minlength="2" required [disabled]="path==='view'" maxlength="50"  name="name"
+            [(ngModel)]="cmsData.name" #cmspagename="ngModel" pattern="^[a-zA-Z][a-zA-Z0-9\s]+$">
+          <mat-error
+            *ngIf="cmspagename?.errors?.pattern && (cmspagename.dirty || cmspagename.touched  || isSubmited) && !cmspagename?.errors?.minlength">
+            Invalid page name
+          </mat-error>
+          <mat-error *ngIf="cmspagename?.errors?.required && (cmspagename.dirty || cmspagename.touched  || isSubmited)">
+            page name is required
+          </mat-error>
+          <mat-error
+            *ngIf="cmspagename?.errors?.minlength && (cmspagename.dirty || cmspagename.touched  || isSubmited)">
+            Minimum 2 characters
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+
+
+
+
+      <div class="col-12">
+        <label class="custom-label">{{path !== 'view' ? 'Content*' :'Content' }}</label>
+
+        <quill-editor [style]="{height: '250px'}" style="margin-top: 10px" name="content" [(ngModel)]="cmsData.content"
+        pattern="^\S$|^\S[\s\S]*$" *ngIf="path !== 'view'" required #content="ngModel"  (input)="isDescriptionInvalid = false"
+        format="html" [modules]="{ counter: { container: '' } }">
+        <div quill-editor-toolbar>
+          <span class="ql-formats">
+            <select class="ql-size">
+              <option value="small"></option>
+              <option selected></option>
+              <option value="large"></option>
+              <option value="huge"></option>
+            </select>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-bold"></button>
+            <button class="ql-italic"></button>
+            <button class="ql-underline"></button>
+            <button class="ql-strike"></button>
+          </span>
+          <span class="ql-formats">
+            <button type="button" class="ql-blockquote">
+              <svg viewBox="0 0 18 18"> <rect class="ql-fill ql-stroke" height="3" width="3" x="4" y="5"></rect> <rect class="ql-fill ql-stroke" height="3" width="3" x="11" y="5"></rect> <path class="ql-even ql-fill ql-stroke" d="M7,8c0,4.031-3,5-3,5"></path> <path class="ql-even ql-fill ql-stroke" d="M14,8c0,4.031-3,5-3,5"></path> </svg>
+            </button>
+            <button type="button" class="ql-code-block">
+                <svg viewBox="0 0 18 18"> <polyline class="ql-even ql-stroke" points="5 7 3 9 5 11"></polyline> <polyline class="ql-even ql-stroke" points="13 7 15 9 13 11"></polyline> <line class="ql-stroke" x1="10" x2="8" y1="5" y2="13"></line> </svg>
+            </button>
+          </span>
+          <span class="ql-formats">
+            <button type="button" class="ql-header" value="1">
+              <svg viewBox="0 0 18 18"> <path class="ql-fill" d="M10,4V14a1,1,0,0,1-2,0V10H3v4a1,1,0,0,1-2,0V4A1,1,0,0,1,3,4V8H8V4a1,1,0,0,1,2,0Zm6.06787,9.209H14.98975V7.59863a.54085.54085,0,0,0-.605-.60547h-.62744a1.01119,1.01119,0,0,0-.748.29688L11.645,8.56641a.5435.5435,0,0,0-.022.8584l.28613.30762a.53861.53861,0,0,0,.84717.0332l.09912-.08789a1.2137,1.2137,0,0,0,.2417-.35254h.02246s-.01123.30859-.01123.60547V13.209H12.041a.54085.54085,0,0,0-.605.60547v.43945a.54085.54085,0,0,0,.605.60547h4.02686a.54085.54085,0,0,0,.605-.60547v-.43945A.54085.54085,0,0,0,16.06787,13.209Z"></path> </svg>
+            </button>
+            <button type="button" class="ql-header" value="2">
+              <svg viewBox="0 0 18 18"> <path class="ql-fill" d="M16.73975,13.81445v.43945a.54085.54085,0,0,1-.605.60547H11.855a.58392.58392,0,0,1-.64893-.60547V14.0127c0-2.90527,3.39941-3.42187,3.39941-4.55469a.77675.77675,0,0,0-.84717-.78125,1.17684,1.17684,0,0,0-.83594.38477c-.2749.26367-.561.374-.85791.13184l-.4292-.34082c-.30811-.24219-.38525-.51758-.1543-.81445a2.97155,2.97155,0,0,1,2.45361-1.17676,2.45393,2.45393,0,0,1,2.68408,2.40918c0,2.45312-3.1792,2.92676-3.27832,3.93848h2.79443A.54085.54085,0,0,1,16.73975,13.81445ZM9,3A.99974.99974,0,0,0,8,4V8H3V4A1,1,0,0,0,1,4V14a1,1,0,0,0,2,0V10H8v4a1,1,0,0,0,2,0V4A.99974.99974,0,0,0,9,3Z"></path> </svg>
+            </button>
+          </span>
+          <span class="ql-formats">
+            <select class="ql-color"></select>
+            <select class="ql-background"></select>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+            <select class="ql-align">
+              <option selected></option>
+              <option value="center"></option>
+              <option value="right"></option>
+              <option value="justify"></option>
+            </select>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-link"></button>
+            <button class="ql-image"></button>
+          </span>
+          <span class="ql-formats">
+              <button class="ql-edit-html">html</button>
+          </span>
+        </div>
+      </quill-editor>
+
+          <div class="view-content-div" *ngIf="path === 'view'" [innerHTML]="cmsData.content">
+
+            </div>
+            <div  *ngIf="path === 'view' && !cmsData?.content">NA</div>
+          <span *ngIf="path !== 'view'">
+            <mat-error style="font-size: 13px" *ngIf="!cmsData?.content && isDescriptionInvalid">
+              Content is required
+            </mat-error>
+          </span>
+         <mat-error style="font-size: 13px" *ngIf="cmsData?.content && isDescriptionInvalid">
+            Invalid content format
+         </mat-error>
+
+      </div>
+
+
+    </div>
+
+    <div class="post-btn">
+      <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='add'">Submit</button>
+      <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='edit'">Update</button>
+      <button mat-raised-button type="button" color="warn" *ngIf="path==='add' || path==='edit'" class="add-btn"
+        [routerLink]="['/cms-pages/list']">Cancel</button>
+      <button mat-raised-button type="button" color="warn" *ngIf="path==='view'" class="add-btn"
+        [routerLink]="['/cms-pages/list']">Close</button>
+    </div>
+
+  </form>
+</section>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

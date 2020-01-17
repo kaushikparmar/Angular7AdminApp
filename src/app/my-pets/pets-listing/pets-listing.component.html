@@ -1,0 +1,157 @@
+<div class="pb-manage-pets-list custom-padding">
+	<mat-nav-list class="custom-nav-list">
+		<mat-label>
+			<a [routerLink]="['/manage-pets']">Manage pets</a>
+		</mat-label>
+		<mat-label>></mat-label>
+
+		<mat-label>List</mat-label>
+	</mat-nav-list>
+	<div class="pb-table-wraper">
+		<div class="filter-section" [class.opened]="searchPanel">
+			<form #searchPets="ngForm" (submit)="getUsers()">
+				<div class="listing-form d-flex justify-content-between align-items-center">
+					<div class="search-box">
+						<mat-form-field class="mat-form-field">
+							<mat-label>Search</mat-label>
+              <input matInput name="search" autocomplete="off" [(ngModel)]="tableConfig.searchString" />
+						</mat-form-field>
+						<button mat-raised-button type="submit" color="primary" *ngIf="dropDownToggle" class="search-btn">Search</button>
+					</div>
+          <div class="right-side-btn d-flex align-items-center">
+            <div class="filter-btn">
+              <button mat-raised-button color="primary" type="button" class="filter-list-icon"
+                      (click)="searchPanel = !searchPanel">
+                Filter
+              </button>
+            </div>
+          </div>
+				</div>
+        <div class="advanced-search-form">
+          <form class="search-form-padding">
+            <div class="row">
+              <div class="col-12 col-sm-6 col-md-4">
+                <mat-form-field>
+                  <mat-label>Pet Name</mat-label>
+                  <input matInput [(ngModel)]="filterPetName" name="filterPetName" />
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4">
+                <mat-form-field>
+                  <mat-label>Breed</mat-label>
+                  <input matInput [(ngModel)]="filterBreed" name="filterBreed" />
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4">
+                <mat-form-field>
+                  <mat-label>Owner Name</mat-label>
+                  <input matInput [(ngModel)]="filterOwnerName" name="filterOwnerName" />
+                </mat-form-field>
+              </div>
+
+              <div class="col-12 col-sm-6 col-md-4">
+                <mat-form-field>
+                  <mat-label>Pet Type</mat-label>
+                  <mat-select value="" [(ngModel)]="filterPetType" name="filterPetType">
+                    <mat-option value="">
+                      Select Pet Type
+                    </mat-option>
+                    <mat-option *ngFor="let option of categoriesOpt" [value]="option.id">
+                      {{option.type | titlecase}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="advanced-search-btn">
+              <button mat-raised-button type="submit" color="primary" class="search-btn" (click)="getUsers();">Search</button>
+              <button mat-raised-button type="button" color="warn" class="clear-btn" (click)="clearFilter();">Clear</button>
+            </div>
+          </form>
+        </div>
+			</form>
+		</div>
+		<div class="pb-table">
+			<div class="mat-elevation-z8">
+
+				<table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+					<!-- Symbol Column-->
+					<ng-container matColumnDef="profile_pic">
+						<th mat-header-cell *matHeaderCellDef>Profile Image</th>
+						<td mat-cell *matCellDef="let pets">
+							<div class="lookupimage-box-box" style="height:70px;width:80px;padding:10px">
+								<img style="height:100%;width:100%;" *ngIf="pets.profile_pic"
+									src="{{originUrl}}/upload/{{pets.profile_pic}}">
+								<span *ngIf="!pets.profile_pic">-</span>
+							</div>
+						</td>
+					</ng-container>
+					<!-- Section Column -->
+					<ng-container matColumnDef="name">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header="name">Pet Name</th>
+						<td mat-cell *matCellDef="let pets">
+							<span *ngIf="pets?.name">{{pets?.name}}</span>
+						</td>
+					</ng-container>
+
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="pet_code">Pet Type</th>
+            <td mat-cell *matCellDef="let pets">
+              <span *ngIf="pets?.fk_pet_deatils_pet_type.type">{{pets?.fk_pet_deatils_pet_type.type}}</span>
+            </td>
+          </ng-container>
+
+					<ng-container matColumnDef="breed">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header="breed">Breed</th>
+						<td mat-cell *matCellDef="let pets">
+							<span *ngIf="pets?.breed">{{pets?.breed}}</span>
+						</td>
+					</ng-container>
+
+          <ng-container matColumnDef="owner">
+            <th mat-header-cell *matHeaderCellDef>Owner Name</th>
+            <td mat-cell *matCellDef="let pets">
+              <span *ngIf="pets?.fk_pet_deatils_owner_id.name">{{pets?.fk_pet_deatils_owner_id.name}}</span>
+            </td>
+          </ng-container>
+
+					<ng-container matColumnDef="created_at">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header="created_on">Created On</th>
+						<td mat-cell *matCellDef="let pets">
+							<span *ngIf="pets?.created_on">{{ pets.created_on | date: 'MM-dd-yyyy' }}</span>
+							<span *ngIf="!pets?.created_on">-</span>
+						</td>
+					</ng-container>
+
+
+					<!-- Star Column -->
+					<ng-container matColumnDef="action">
+						<th mat-header-cell *matHeaderCellDef></th>
+						<td mat-cell *matCellDef="let pets">
+							<mat-menu #appMenu="matMenu">
+								<button mat-menu-item (click)="viewDetail(pets)">View</button>
+							</mat-menu>
+
+							<button mat-icon-button [matMenuTriggerFor]="appMenu"
+								(click)="$event.preventDefault(); $event.stopPropagation()">
+								<mat-icon>more_vert</mat-icon>
+							</button>
+						</td>
+					</ng-container>
+
+					<tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+					<tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="viewDetail(row)"></tr>
+				</table>
+				<div class="no-records" *ngIf="TABLE_DATA?.length === 0">
+					No records found
+				</div>
+
+				<mat-paginator class="mat-paginator-sticky" [length]="tableConfig.totalRecords" [pageSizeOptions]="[10, 20, 30]"
+					showFirstLastButtons (page)="pageChanged($event)"></mat-paginator>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="isLoading" *ngIf="isLoading">
+	<mat-spinner></mat-spinner>
+</div>

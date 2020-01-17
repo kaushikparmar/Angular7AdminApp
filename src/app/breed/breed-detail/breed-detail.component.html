@@ -1,0 +1,68 @@
+
+  <section class="breed-details-section custom-padding">
+    <mat-nav-list class="custom-nav-list">
+      <mat-label>
+        <a [routerLink]="['/breed']">Breed</a>
+      </mat-label>
+      <mat-label>></mat-label>
+      <mat-label *ngIf="path === 'add'">Add Breed</mat-label>
+      <mat-label *ngIf="path === 'edit'">Edit Breed</mat-label>
+      <mat-label *ngIf="path === 'view'">View Breed</mat-label>
+    </mat-nav-list>
+
+
+
+  <!-- <label class="custom-header">View Breed</label> -->
+
+  <form #breedForm="ngForm" novalidate class="custom-form-padding" (ngSubmit)="crudBreed(breedForm)">
+    <!-- <div class="row"> -->
+
+    <div class="col-12 col-sm-6 col-md-6">
+      <mat-form-field>
+        <input matInput placeholder=" Breed Name" required pattern="^[a-zA-Z][a-zA-Z\s]+$" minlength="2"
+          maxlength="250" name="breeds_name" #breedname="ngModel" [(ngModel)]="breedsData.name">
+        <mat-error *ngIf="breedname?.errors?.required && (breedname.dirty || breedname.touched  || isSubmited)">
+           Breed name is required
+        </mat-error>
+
+        <mat-error
+          *ngIf="breedname?.errors?.pattern && (breedname?.dirty || breedname?.touched  || isSubmited) && !breedname?.errors?.minlength">
+          Invalid breed name
+        </mat-error>
+
+        <mat-error *ngIf="breedname?.errors?.minlength && (breedname.dirty || breedname.touched  || isSubmited)">
+          Minimum 2 characters
+        </mat-error>
+      </mat-form-field>
+
+
+    </div>
+    <div class="col-12 col-sm-6 col-md-6">
+      <mat-form-field>
+        <mat-select placeholder="Select Pet Type" required name="breeds_id" #breed="ngModel"
+          [(ngModel)]="breedsData.breed">
+          <mat-option *ngFor="let breed of fetchBreedTypeData" [value]="breed.id">
+            {{breed.type}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="breed?.errors?.required && (breed.dirty || breed.touched  || isSubmited)">
+          Pet Type is required
+        </mat-error>
+      </mat-form-field>
+
+    </div>
+
+    <div class="post-btn">
+      <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='add'">Submit</button>
+        <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='edit'">Update</button>
+        <button mat-raised-button type="button" color="warn" *ngIf="path==='add' || path==='edit'" class="add-btn"
+          [routerLink]="['/breed/list']">Cancel</button>
+          <button mat-raised-button type="button" color="warn" *ngIf="path==='view'" class="add-btn"
+          [routerLink]="['/breed/list']">Close</button>
+    </div>
+
+</form>
+</section>
+<div class="isLoading" *ngIf="isLoading">
+<mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,23 @@
+.pb-user-details-component {
+.mat-form-field{
+  width: 100%;
+}
+.no-data-found{
+  text-align: center;
+  width: 100%;
+  padding: 10px;
+}
+.user-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: calc(100VH - 50px);
+  justify-content: center;
+  .flex-item {
+    margin-top: 5%;
+    font-size: 24px;
+    font-weight: 600;
+  }
+}
+
+}

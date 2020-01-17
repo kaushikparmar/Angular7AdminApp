@@ -1,0 +1,40 @@
+<section class="availability-section">
+  <div class="container-fluid">
+      <div class="row" *ngFor="let availabilitieData of serviceAvailabilities">
+          <div class="col-12">
+              <label class="custom-label">Days</label>
+              <div class="d-flex">
+                  <label class="custom-value">
+                    {{availabilitieData.days}}
+                  </label>
+                </div>
+          </div>
+          <div class="col-12">
+            <label class="custom-label">Time</label>
+            <div class="d-flex">
+              <label class="custom-value">
+                From: <span>{{availabilitieData.from_time}}&nbsp;</span>
+              </label>
+              <label class="custom-value">
+                To: <span>{{availabilitieData.to_time}}</span>
+              </label>
+            </div>
+          </div>
+          <div class="col-12">
+              <label class="custom-label">Dates</label>
+                <div class="d-flex">
+                    <!-- <label class="custom-value">
+                      {{availabilitieData.from_date}}
+                    </label> -->
+                    <label class="custom-value">
+                      From: <span>{{availabilitieData.from_date}}&nbsp;</span>
+                    </label>
+                    <label class="custom-value">
+                      To: <span>{{availabilitieData.to_date}}</span>
+                    </label>
+                </div>
+          </div>
+        </div>
+  </div>
+
+</section>

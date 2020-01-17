@@ -1,0 +1,172 @@
+<div class="pb-press-list-component custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/reviews-ratings']">Reviews & Ratings</a>
+    </mat-label>
+    <mat-label>></mat-label>
+    <mat-label>List</mat-label>
+  </mat-nav-list>
+  <div class="pb-table-wraper">
+    <div class="filter-section" [class.opened]="searchPanel">
+      <form #searchUser="ngForm" (submit)="getReviewList()">
+        <div class="listing-form d-flex justify-content-between align-items-center">
+          <div class="search-box">
+            <mat-form-field class="mat-form-field">
+              <mat-label>Search</mat-label>
+              <input matInput name="search" autocomplete="off" [(ngModel)]="tableConfig.searchString" />
+              <!-- <mat-icon class="settings-icon unselectable">search</mat-icon> -->
+            </mat-form-field>
+            <button mat-raised-button type="submit" color="primary" class="search-btn">Search</button>
+          </div>
+          <div class="right-side-btn d-flex align-items-center">
+						<div class="filter-btn">
+							<button mat-raised-button color="primary" type="button" class="filter-list-icon"
+							(click)="searchPanel = !searchPanel">
+								Filter
+							</button>
+						</div>
+					</div>
+        </div>
+        <div class="advanced-search-form">
+					<form class="search-form-padding">
+						<div class="row">
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Rating</mat-label>
+									<mat-select value="Select rating" [(ngModel)]="selectedNumber" name="selectedNumber">
+										<mat-option value="Select rating">
+											Select rating
+										</mat-option>
+                    <mat-option value="1">1</mat-option>
+                    <mat-option value="2">2</mat-option>
+                    <mat-option value="3">3</mat-option>
+                    <mat-option value="4">4</mat-option>
+                    <mat-option value="5">5</mat-option>
+									</mat-select>
+								</mat-form-field>
+							</div>
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Choose a startdate</mat-label>
+										<input matInput [matDatepicker]="picker1" [(ngModel)]="startDate" (ngModelChange)="changeStartDate();" name="startdate" disabled>
+										<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+										<mat-datepicker #picker1 disabled="false"></mat-datepicker>
+								</mat-form-field>
+							</div>
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Choose a enddate</mat-label>
+									<input matInput [matDatepicker]="picker2" [min]="startDate" [(ngModel)]="endDate" name="enddate" disabled>
+									<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+									<mat-datepicker #picker2 disabled="false"></mat-datepicker>
+								</mat-form-field>
+							</div>
+						</div>
+						<div class="advanced-search-btn">
+							<button mat-raised-button type="submit" color="primary" class="search-btn" (click)="filterSearch();">Search</button>
+							<button mat-raised-button type="button" color="warn" class="clear-btn" (click)="clearFilter();">Clear</button>
+						</div>
+					</form>
+				</div>
+      </form>
+    </div>
+    <div class="pb-table">
+      <div class="mat-elevation-z8">
+  
+        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+
+          <!-- Symbol Column-->
+          <ng-container matColumnDef="pet_owner">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="name&isPetOwner=true">Pet owner</th>
+            <td mat-cell *matCellDef="let review" [routerLink]="['/reviews-ratings/reviews-ratings-view/'+review.id]" class="text-capitalize">{{ review.pet_owner.name }}
+                <span *ngIf="!review.pet_owner.name">-</span>
+            </td>
+
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="service_provider">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="name&isPetOwner=false">Service provider</th>
+            <td mat-cell *matCellDef="let review" [routerLink]="['/reviews-ratings/reviews-ratings-view/'+review.id]" class="text-capitalize">{{ review.service_provider.name }}
+                <span *ngIf="!review.service_provider.name">-</span>
+            </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header="description">Description</th>
+              <td mat-cell *matCellDef="let review" [routerLink]="['/reviews-ratings/reviews-ratings-view/'+review.id]" class="text-capitalize">{{ review.description }}
+                <span *ngIf="!review.description">-</span>
+              </td>
+          </ng-container>
+          
+          <ng-container matColumnDef="ratings">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="rating">Rating</th>
+            <td mat-cell *matCellDef="let review" [routerLink]="['/reviews-ratings/reviews-ratings-view/'+review.id]">
+                <div class="favorite-stars">
+                  <ngb-rating [(rate)]="review.rating" [starTemplate]="t" [readonly]="true" max="5">
+                      <ng-template #t let-fill="fill">
+                          <span class="star" [class.full]="fill === 100">
+                          <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+                          </span>
+                      </ng-template>
+                  </ngb-rating>
+                </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="created_on">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="created_on">Created On</th>
+            <td mat-cell *matCellDef="let review" [routerLink]="['/reviews-ratings/reviews-ratings-view/'+review.id]">{{ review?.created_on | date: 'MM-dd-yyyy' }}
+                <span *ngIf="!review.created_on">-</span>
+            </td>
+            
+          </ng-container>
+
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="updated_on">
+            <th mat-header-cell *matHeaderCellDef>Updated On</th>
+            <td mat-cell *matCellDef="let review" [routerLink]="['/reviews-ratings/reviews-ratings-view/'+review.id]">{{ review?.updated_on | date: 'MM-dd-yyyy' }}
+                <span *ngIf="!review.updated_on">-</span>
+            </td>
+          </ng-container>
+
+
+          <!-- Star Column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let review">
+              <mat-menu #appMenu="matMenu">
+                <button mat-menu-item [routerLink]="['/reviews-ratings/reviews-ratings-view/'+review.id]">View</button>
+                <button mat-menu-item (click)="openDialog(review)">Delete</button>
+              </mat-menu>
+              <button mat-icon-button [matMenuTriggerFor]="appMenu"
+                (click)="$event.preventDefault(); $event.stopPropagation()">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <!--(click)="edit(row)"-->
+        </table>
+        <div class="no-records" *ngIf="dataSource?.length === 0">
+          No records found
+        </div>
+
+        <mat-paginator
+          class="mat-paginator-sticky"
+          [length]="tableConfig.totalRecords"
+          [pageSizeOptions]="[10, 20, 30]"
+          showFirstLastButtons
+          (page)="pageChanged($event)"
+        ></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

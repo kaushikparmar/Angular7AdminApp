@@ -1,0 +1,55 @@
+<div class="set-cancellation-container custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/manage-cancellation']">Manage Cancellation</a>
+    </mat-label>
+    <mat-label>></mat-label>
+    <mat-label>Set Cancellation</mat-label>
+  </mat-nav-list>
+  <form #UserForm="ngForm" (ngSubmit)="updateCommission(UserForm)" novalidate class="custom-form-padding">
+    <div class="row">
+      <!-- <div class="col-12 col-sm-4 col-md-4" >
+        <mat-form-field>
+          <mat-select placeholder="Select Cancellation Type" required name="commission_type" [(ngModel)]="is_hour">
+            <mat-option value="true">
+             True
+            </mat-option>
+            <mat-option value="false">
+              False
+            </mat-option>
+          </mat-select>
+          <mat-error>
+            required
+          </mat-error>
+        </mat-form-field>
+      </div> -->
+      <div class="col-12 col-sm-4 col-md-4">
+
+        <mat-form-field>
+          <input #hours="ngModel" matInput placeholder="Time" pattern="[0-9]*" name="time" maxlength="255" required
+            autocomplete="off"   [(ngModel)] = "time">
+          <mat-error *ngIf="hours?.errors?.required">
+            Time is required
+          </mat-error>
+          <mat-error *ngIf="hours?.errors?.pattern">
+            Must be a number only
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+
+    <div class="post-btn">
+      <button mat-raised-button type="submit" color="primary" class="add-btn">Update</button>
+      <button mat-raised-button type="button" color="warn" class="add-btn"
+        [routerLink]="['/manage-cancellation']">Cancel</button>
+      <!-- <button mat-raised-button type="button" color="warn" class="add-btn"
+        [routerLink]="['/blog-category', 'blog-category-list']"
+        *ngIf="urlInfo.currentState === constants.viewRouteUrl">Close</button> -->
+    </div>
+  </form>
+
+</div>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,214 @@
+<section class="topics-details-section custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/topics']">Help Topics</a>
+    </mat-label>
+    <mat-label>></mat-label>
+    <mat-label *ngIf="path === 'add'">Add Help Topic</mat-label>
+    <mat-label *ngIf="path === 'edit'">Edit Help Topic</mat-label>
+    <mat-label *ngIf="path === 'view'">View Help Topic</mat-label>
+  </mat-nav-list>
+
+  <!-- <label class="custom-header" *ngIf="path ==='edit'">Edit Topics</label>
+  <label class="custom-header" *ngIf="path ==='add'">Add Topics</label>
+  <label class="custom-header" *ngIf="path ==='view'">View Topics</label> -->
+
+
+  <!-- For Add Topic & Sub Topic -->
+<div class="custom-form-padding">
+
+
+  <mat-tab-group *ngIf="path === 'add'" (selectedTabChange)="tabChange()">
+    <mat-tab label="Topic">
+      <form #addtopicForm="ngForm" novalidate (ngSubmit)="crudTopic(addtopicForm)">
+        <!-- <div class="row"> -->
+        <div class="col-12 col-sm-6 col-md-6">
+          <mat-form-field>
+            <input matInput pattern="^[a-zA-Z][a-zA-Z0-9\s]+$" minlength="2" maxlength="250" required
+              placeholder="Topic Name" name="categoryName" #addTopicName="ngModel"
+              [(ngModel)]="topicsData.categoryName">
+            <mat-error
+              *ngIf="addTopicName?.errors?.pattern && (addTopicName.dirty || addTopicName.touched  || isSubmited) && !addTopicName?.errors?.minlength">
+              Invalid topic name
+            </mat-error>
+            <mat-error
+              *ngIf="addTopicName?.errors?.required && (addTopicName.dirty || addTopicName.touched  || isSubmited)">
+              Topic name is required
+            </mat-error>
+            <mat-error
+              *ngIf="addTopicName?.errors?.minlength && (addTopicName.dirty || addTopicName.touched  || isSubmited)">
+              Minimum 2 characters
+            </mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="post-btn">
+          <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='add'">Submit</button>
+          <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='edit'">Update</button>
+          <button mat-raised-button type="button" color="warn" class="add-btn" [routerLink]="['/topics/list']"
+            *ngIf="path !=='view'">Cancel</button>
+          <button mat-raised-button type="button" color="warn" class="add-btn" [routerLink]="['/topics/list']"
+            *ngIf="path ==='view'">Close</button>
+        </div>
+
+        <!-- </div> -->
+      </form>
+    </mat-tab>
+    <mat-tab label="Sub Topic">
+      <form #addsubtopicForm="ngForm" novalidate (ngSubmit)="crudTopic(addsubtopicForm)">
+        <!-- <div class="row"> -->
+        <div class="col-12 col-sm-6 col-md-6">
+          <mat-form-field>
+            <mat-select placeholder="Select Topics" required name="Topics_id" #topic="ngModel"
+              [(ngModel)]="topicsData.topics">
+              <mat-option *ngFor="let topic of fetchTopicsData" [value]="topic.id">
+                {{topic.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="topic?.errors?.required && (topic.dirty || topic.touched  || isSubmited)">
+              Topics is required
+            </mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-12 col-sm-6 col-md-6">
+          <mat-form-field>
+            <input matInput placeholder=" Sub Topic Name" required pattern="^[a-zA-Z][a-zA-Z0-9\s]+$" minlength="2"
+              maxlength="250" name="sub_Topics_name" #subtopic="ngModel" [(ngModel)]="topicsData.categoryName">
+            <mat-error *ngIf="subtopic?.errors?.required && (subtopic.dirty || subtopic.touched  || isSubmited)">
+              Sub topic name is required
+            </mat-error>
+
+            <mat-error
+              *ngIf="subtopic?.errors?.pattern && (subtopic.dirty || subtopic.touched  || isSubmited) && !subtopic?.errors?.minlength">
+              Invalid sub topic name
+            </mat-error>
+
+            <mat-error *ngIf="subtopic?.errors?.minlength && (subtopic.dirty || subtopic.touched  || isSubmited)">
+              Minimum 2 characters
+            </mat-error>
+          </mat-form-field>
+
+
+        </div>
+        <div class="post-btn">
+          <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='add'">Submit</button>
+          <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='edit'">Update</button>
+          <button mat-raised-button type="button" color="warn" class="add-btn" [routerLink]="['/topics/list']"
+            *ngIf="path !=='view'">Cancel</button>
+          <button mat-raised-button type="button" color="warn" class="add-btn" [routerLink]="['/topics/list']"
+            *ngIf="path ==='view'">Close</button>
+        </div>
+      </form>
+    </mat-tab>
+  </mat-tab-group>
+
+  <!-- For Edit & View  Topic & Sub Topic -->
+  <form #topicForm="ngForm" *ngIf="path !== 'add'" novalidate (ngSubmit)="crudTopic(topicForm)">
+  <div class="row">
+    <div class="col-12" *ngIf="path !== 'add' && this.topicsData.topics">
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <mat-select placeholder="Select Topics" required [disabled]="path==='view'" name="Topics_id" #topic="ngModel"
+            [(ngModel)]="topicsData.topics">
+            <mat-option *ngFor="let topic of fetchTopicsData" [value]="topic.id">
+              {{topic.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="topic?.errors?.required && (topic.dirty || topic.touched  || isSubmited)">
+            Topics is required
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-12" *ngIf="path !== 'add' && !this.topicsData.topics">
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Category" [disabled]="path==='view'" pattern="^[a-zA-Z][a-zA-Z0-9\s]+$"
+            minlength="2" maxlength="250" required name="parentTopic" #parentTopics="ngModel"
+            [(ngModel)]="topicsData.parentTopic">
+          <mat-error
+            *ngIf="parentTopics?.errors?.pattern && (parentTopics.dirty || parentTopics.touched  || isSubmited) && !parentTopics?.errors?.minlength">
+            Invalid topic name
+          </mat-error>
+          <mat-error
+            *ngIf="parentTopics?.errors?.required && (parentTopics.dirty || parentTopics.touched  || isSubmited)">
+            Topic name is required
+          </mat-error>
+          <mat-error
+            *ngIf="parentTopics?.errors?.minlength && (parentTopics.dirty || parentTopics.touched  || isSubmited)">
+            Minimum 2 characters
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="col-12" *ngIf="path !== 'add' &&  this.topicsData.topics ">
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Sub Category" name="subTopic" [disabled]="path==='view'"
+            pattern="^[a-zA-Z][a-zA-Z0-9\s]+$" minlength="2" maxlength="250" required #editSubCategory="ngModel"
+            [(ngModel)]="topicsData.subTopic">
+          <mat-error
+            *ngIf="editSubCategory?.errors?.pattern && (editSubCategory.dirty || editSubCategory.touched  || isSubmited) && !editSubCategory?.errors?.minlength">
+            Invalid topic name
+          </mat-error>
+          <mat-error
+            *ngIf="editSubCategory?.errors?.required && (editSubCategory.dirty || editSubCategory.touched  || isSubmited)">
+            Topic name is required
+          </mat-error>
+          <mat-error
+            *ngIf="editSubCategory?.errors?.minlength && (editSubCategory.dirty || editSubCategory.touched  || isSubmited)">
+            Minimum 2 characters
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+
+
+  </div>
+  <div class="col-12" *ngIf="path !== 'add'">
+    <div class="slide-section">
+      <mat-slide-toggle labelPosition="before" class="example-margin" color="primary" name="status"
+        [disabled]="path==='view'" [(ngModel)]="topicsData.status">
+        Status
+      </mat-slide-toggle>
+    </div>
+
+  </div>
+  </div>
+
+  <!-- <div class="row">
+      <div class="col">
+        <div class="d-flex justify-content-end">
+          <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='add'">Submit</button>
+          <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='edit'">Update</button>
+          <button mat-raised-button type="button" color="warn" class="add-btn ml-3"
+            [routerLink]="['/topics/list']">Close</button>
+        </div>
+
+      </div>
+    </div> -->
+  <div class="post-btn">
+    <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='add'">Submit</button>
+    <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path==='edit'">Update</button>
+    <button mat-raised-button type="button" color="warn" class="add-btn" [routerLink]="['/topics/list']"
+      *ngIf="path !=='view'">Cancel</button>
+    <button mat-raised-button type="button" color="warn" class="add-btn" [routerLink]="['/topics/list']"
+      *ngIf="path ==='view'">Close</button>
+  </div>
+  </form>
+
+</div>
+</section>
+
+
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

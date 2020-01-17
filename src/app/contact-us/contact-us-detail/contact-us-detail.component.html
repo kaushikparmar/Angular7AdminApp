@@ -1,0 +1,55 @@
+<section class="contact-details-section custom-padding" *ngIf="fetchedContactInfo">
+  <h2 class="page-header"></h2>
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/contact-us']">Contact Us</a>
+    </mat-label>
+    <mat-label>></mat-label>
+    <mat-label>View Contact Us</mat-label>
+  </mat-nav-list>
+
+  <!-- <label class="custom-header">View Contact Us</label> -->
+
+  <form #contactUsForm="ngForm" novalidate class="custom-form-padding">
+    <div class="row">
+      <div class="col-12 col-sm-4 col-md-4">
+        <mat-form-field>
+          <input matInput placeholder="Topic Name" [(ngModel)]="fetchedContactInfo?.category['name']" name="topic"
+            disabled="true" disabled="true">
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-sm-4 col-md-4">
+        <mat-form-field>
+          <input matInput placeholder="Full Name" name="username" [(ngModel)]="fetchedContactInfo['name']"
+            disabled="true">
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-4 col-md-4">
+        <mat-form-field>
+          <input matInput placeholder="Email ID" value="emailbrainvire.com" name="email"
+            [(ngModel)]="fetchedContactInfo['email']" disabled="true">
+        </mat-form-field>
+      </div>
+
+      <div class="col-12">
+        <!-- <mat-form-field> -->
+          <label class="custom-disabled-label mb-0">Message</label>
+          <!-- <textarea cdkTextareaAutosize cdkAutosizeMinRows="10"  matInput placeholder="Message" value="Description1Description1Description1
+    Description1Description1Description1Description1" name="categoryTitle" [(ngModel)]="fetchedContactInfo['message']"
+            disabled="true"></textarea> -->
+            <div [innerHTML]="fetchedContactInfo['message']"></div>
+        <!-- </mat-form-field> -->
+      </div>
+
+    </div>
+    <div class="post-btn">
+      <button mat-raised-button type="submit" color="warn" class="add-btn"
+        [routerLink]="['/contact-us/contact-us-list']">Close</button>
+    </div>
+
+  </form>
+</section>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

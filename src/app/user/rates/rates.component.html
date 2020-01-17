@@ -1,0 +1,143 @@
+<section class="rates-services-section">
+  <mat-tab-group (selectedTabChange)="onTabChange($event)">
+    <mat-tab label="Dog">
+      <mat-accordion>
+        <label  class="no-data-found" *ngIf="!rateDetails.length">No data Available</label>
+        <mat-expansion-panel *ngFor="let rateDetail of rateDetails">
+          <mat-expansion-panel-header>
+            <mat-panel-description>
+              <div class="row w-100">
+                <div class="col-1">
+                  {{rateDetail.service_type_master.service_type}}
+                </div>
+                <div class="col">
+                  {{rateDetail.service_type_master.service_type_description}}
+                  <span *ngIf="!rateDetail.service_type_master.service_type_description">-</span>
+                </div>
+                <div class="col-auto">
+                  Rates per day
+                </div>
+                <div class="col-auto">
+                  ${{rateDetail.rate}}
+                </div>
+              </div>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="row">
+            <div class="col-12">
+              <div class="row" *ngFor="let category of rateDetail.service_type_category_masters">
+                <div class="col">
+                  <h5>{{category.category_title }}</h5>
+                  <label>{{category.category_description}}</label>
+                </div>
+                <div class="col-auto">
+                  Rates per day
+                </div>
+                <div class="col-auto">
+                  ${{category.rate}}
+                </div>
+              </div>
+              <mat-divider></mat-divider>
+            </div>
+          </div>
+        </mat-expansion-panel>
+
+      </mat-accordion>
+    </mat-tab>
+
+
+    <mat-tab label="Cat">
+      <mat-accordion>
+        <label class="no-data-found" *ngIf="!rateDetails.length">No data Available</label>
+        <mat-expansion-panel *ngFor="let rateDetail of rateDetails">
+          <mat-expansion-panel-header>
+            <mat-panel-description>
+              <div class="row w-100">
+                <div class="col-1">
+                  {{rateDetail.service_type_master.service_type}}
+                </div>
+                <div class="col">
+                  {{rateDetail.service_type_master.service_type_description}}
+                  <span *ngIf="!rateDetail.service_type_master.service_type_description">-</span>
+                </div>
+                <div class="col-auto">
+                  Rates per day
+                </div>
+                <div class="col-auto">
+                  ${{rateDetail.rate}}
+                </div>
+              </div>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="row">
+            <div class="col-12">
+              <div class="row" *ngFor="let category of rateDetail.service_type_category_masters">
+                <div class="col">
+                  <h5>{{category.category_title }}</h5>
+                  <label>{{category.category_description}}</label>
+                </div>
+                <div class="col-auto">
+                  Rates per day
+                </div>
+                <div class="col-auto">
+                  ${{category.rate}}
+                </div>
+              </div>
+              <mat-divider></mat-divider>
+            </div>
+          </div>
+        </mat-expansion-panel>
+
+      </mat-accordion>
+    </mat-tab>
+
+
+    <mat-tab label="Bird">
+      <mat-accordion>
+        <label  class="no-data-found" *ngIf="!rateDetails.length">No data Available</label>
+        <mat-expansion-panel *ngFor="let rateDetail of rateDetails">
+          <mat-expansion-panel-header>
+            <mat-panel-description>
+              <div class="row w-100">
+                <div class="col-1">
+                  {{rateDetail.service_type_master.service_type}}
+                </div>
+                <div class="col">
+                  {{rateDetail.service_type_master.service_type_description}}
+                  <span *ngIf="!rateDetail.service_type_master.service_type_description">-</span>
+                </div>
+                <div class="col-auto">
+                  Rates per day
+                </div>
+                <div class="col-auto">
+                  ${{rateDetail.rate}}
+                </div>
+              </div>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="row">
+            <div class="col-12">
+              <div class="row" *ngFor="let category of rateDetail.service_type_category_masters">
+                <div class="col">
+                  <h5>{{category.category_title }}</h5>
+                  <label>{{category.category_description}}</label>
+                </div>
+                <div class="col-auto">
+                  Rates per day
+                </div>
+                <div class="col-auto">
+                  ${{category.rate}}
+                </div>
+              </div>
+              <mat-divider></mat-divider>
+            </div>
+          </div>
+        </mat-expansion-panel>
+
+      </mat-accordion>
+    </mat-tab>
+  </mat-tab-group>
+</section>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,9 @@
+<section class="service-detail-section">
+  <ul>
+    <li class="d-flex flex-column" *ngFor="let serviceData of serviceDetails">
+      <label class="question">{{serviceData?.fk_question_id?.question}}</label>
+      <label class="answer" *ngIf="serviceData?.answer && !serviceData?.isMultipleAnswer">{{serviceData?.answer}}</label>
+      <label class="answer" *ngIf="!serviceData?.answer">-</label>
+    </li>
+  </ul>
+</section>

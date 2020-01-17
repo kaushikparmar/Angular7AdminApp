@@ -1,0 +1,176 @@
+<section class="custom-padding home-section">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/cms-pages/home/content']">Home Content</a>
+    </mat-label>
+    <mat-label>></mat-label>
+    <mat-label>Update</mat-label>
+
+  </mat-nav-list>
+
+
+  <form #updateContentForm="ngForm" (ngSubmit)="updateContent()" class="custom-form-padding">
+    <div class="row">
+      <div class="col-12 mt-4 d-block section-header">
+        <h5>Section 1</h5>
+        <mat-divider class="pt-2 pb-3 w-100"></mat-divider>
+      </div>
+      <div class="col-6 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Title"  required autocomplete="off" autocapitalize="off" type="text" [(ngModel)]="formContent.SECTION1_TITLE" #section1_title="ngModel" name="SECTION1_TITLE">
+          <mat-error *ngIf="section1_title.dirty && section1_title?.errors?.required">
+            Title is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-6 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Sub Title" autocomplete="off" autocapitalize="off" type="text" [(ngModel)]="formContent.SECTION1_SUBTITLE" #section1_subtitle="ngModel"  name="SECTION1_SUBTITLE">
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-12 col-md-12">
+        <mat-form-field>
+          <textarea matInput placeholder="Content"  required autocomplete="off" autocapitalize="off" type="text" [(ngModel)]="formContent.SECTION1_CONTENT"  #section1_content="ngModel"  name="SECTION1_CONTENT"></textarea>
+          <mat-error *ngIf="section1_content.dirty && section1_content?.errors?.required">
+            Content required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <div class="col-12 mt-4 d-block section-header">
+        <h5>Section 2</h5>
+        <mat-divider class="pt-2 pb-3 w-100"></mat-divider>
+      </div>
+
+      <div class="col-6 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Title"  required autocomplete="off" autocapitalize="off" type="text" [(ngModel)]="formContent.SECTION2_TITLE"  #section2_title="ngModel"  name="SECTION2_TITLE">
+        </mat-form-field>
+        <mat-error *ngIf="section2_title.dirty && section2_title?.errors?.required">
+          Title is required
+        </mat-error>
+      </div>
+
+      <div class="col-6 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Sub Title" autocomplete="off" autocapitalize="off" type="text" [(ngModel)]="formContent.SECTION2_SUBTITLE" #section2_subtitle="ngModel"  name="SECTION2_SUBTITLE">
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-12 col-md-12">
+        <mat-form-field>
+          <textarea matInput placeholder="Content"  required autocomplete="off" autocapitalize="off" type="text" [(ngModel)]="formContent.SECTION2_CONTENT" #section2_content="ngModel"   name="SECTION2_CONTENT"></textarea>
+        </mat-form-field>
+        <mat-error *ngIf="section2_content.dirty && section2_content?.errors?.required">
+          Content required
+        </mat-error>
+      </div>
+
+      <div class="col-12 col-sm-12 col-md-12">
+        <div class="upload-photo-wrapper d-flex mb-3 mt-0">
+          <div class='upload-btn ml-0 mr-auto'>
+            <input type='file' #uploadImageInputSection2 accept=".png, .jpg, .jpeg" name="section2_image" id='upload-image1'
+                   class='upload-input' [(ngModel)]="formContent.IMAGE_SECTION2" #section2_image="ngModel" (change)="onImageUploadSection2($event)" />
+            <label class='mb-0 upload-text d-flex align-items-center' for='upload-images'>
+              <button>Upload Section 2 Image</button>
+            </label>
+            <mat-error style="font-size: small" *ngIf="!section2ImageData.imageUrl && updateContentForm.submitted">
+              Image is required
+            </mat-error>
+            <mat-error style="font-size: small" *ngIf="updateContentForm.submitted && section2_image?.errors?.sizeExceeds">
+              Image size should be less than 2 MB
+            </mat-error>
+            <mat-error style="font-size: small" *ngIf="updateContentForm.submitted && section2_image?.errors?.fileType">
+              Image type should be PNG, JPG, JPEG
+            </mat-error>
+          </div>
+          <div class="upload-img" *ngIf="section2ImageData.imageUrl">
+            <mat-icon color="warn" (click)="removeSecion2Image();">highlight_off</mat-icon>
+            <img [src]="section2ImageData.imageUrl" alt="location-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 mt-4 d-block section-header">
+        <h5>Section 3</h5>
+        <mat-divider class="pt-2 pb-3 w-100"></mat-divider>
+      </div>
+      <div class="col-6 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Title"  required autocomplete="off" autocapitalize="off" type="text" [(ngModel)]="formContent.SECTION3_TITLE"  #section3_title="ngModel"  name="SECTION3_TITLE">
+        </mat-form-field>
+        <mat-error *ngIf="section3_title.dirty && section3_title?.errors?.required">
+          Title is required
+        </mat-error>
+      </div>
+
+      <div class="col-6 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Sub Title"  autocomplete="off" autocapitalize="off" type="text" [(ngModel)]="formContent.SECTION3_SUBTITLE" #section2_subtitle="ngModel" name="SECTION3_SUBTITLE">
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-12 col-md-12">
+        <div class="upload-photo-wrapper d-flex mb-3 mt-0">
+          <div class='upload-btn ml-0 mr-auto'>
+            <input type='file' #uploadImageInputSection3 accept=".png, .jpg, .jpeg" name="section3_image" id='upload-image3'
+              class='upload-input' [(ngModel)]="formContent.IMAGE_SECTION3" #section3_image="ngModel"
+              (change)="onImageUploadSection3($event)" />
+            <label class='mb-0 upload-text d-flex align-items-center' for='upload-images'>
+              <button>Upload Section 3 Image</button>
+            </label>
+            <mat-error style="font-size: small" *ngIf="!section3ImageData.imageUrl && updateContentForm.submitted">
+              Image is required
+            </mat-error>
+            <mat-error style="font-size: small" *ngIf="updateContentForm.submitted && section3_image?.errors?.sizeExceeds">
+              Image size should be less than 2 MB
+            </mat-error>
+            <mat-error style="font-size: small" *ngIf="updateContentForm.submitted && section3_image?.errors?.fileType">
+              Image type should be PNG, JPG, JPEG
+            </mat-error>
+          </div>
+          <div class="upload-img" *ngIf="section3ImageData.imageUrl">
+            <mat-icon color="warn" (click)="removeSecion3Image();">highlight_off</mat-icon>
+            <img [src]="section3ImageData.imageUrl" alt="location-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 mt-4 d-block section-header">
+        <h5>Section 4</h5>
+        <mat-divider class="pt-2 pb-3 w-100"></mat-divider>
+      </div>
+        <div class="col-12 col-sm-6 col-md-6">
+          <mat-form-field>
+            <input matInput placeholder="Title"  required autocomplete="off" autocapitalize="off" type="text" [(ngModel)]="formContent.SECTION4_TITLE" #section4_title="ngModel"   name="SECTION4_TITLE">
+          </mat-form-field>
+          <mat-error *ngIf="section4_title.dirty && section4_title?.errors?.required">
+            Title is required
+          </mat-error>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+      <div class="post-btn">
+        <button mat-raised-button type="submit" color="primary" class="add-btn">Update</button>
+        <button mat-raised-button type="button" color="warn"  class="add-btn"  [routerLink]="['/dashboard']">Cancel</button>
+      </div>
+
+    </div>
+
+  </form>
+</section>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

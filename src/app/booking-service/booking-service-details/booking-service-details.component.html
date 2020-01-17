@@ -1,0 +1,99 @@
+<div class="custom-padding pb-booking-service-details-component">
+    <mat-nav-list class="custom-nav-list">
+        <mat-label>
+            <a [routerLink]="['/booking-service']">Booking Service</a>
+        </mat-label>
+        <mat-label> > </mat-label>
+        <mat-label>Details</mat-label>
+    </mat-nav-list>
+    <div class="custom-form-padding">
+        <div class="row" *ngFor="let data of detailsData">
+            <div class="col-sm-6 details-section">
+                <mat-card class="text-center cus-mat-card">
+                    <h3>Pet Owner</h3>
+                    <img mat-card-image class="details-image" src="{{originUrl}}/upload/{{data.pet_owner_profile}}">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="details mb-2">
+                                <span class="text-uppercase">Name:</span>
+                                <div>{{data.pet_owner_name}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card>
+                <mat-card class="text-center mt-2 cus-mat-card">
+                    <h3>Service Provider</h3>
+                    <img mat-card-image class="details-image" src="{{originUrl}}/upload/{{data.service_provider_profile}}">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="details mb-2">
+                                <span class="text-uppercase">Name:</span>
+                                <div>{{data.service_provider_name}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+            <div class="col-sm-6">
+                <mat-card class="cus-mat-card">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="details mb-2">
+                                <span class="text-uppercase d-inline-block width-100">Date:</span>
+                                <span class="display:inline-block">{{data.created_at.split("T")[0] | date : 'dd/MM/yyyy'}}</span>
+                            </div>
+                            <div class="details mb-2">
+                                <span class="text-uppercase d-inline-block width-100">Status:</span>
+                                <span class="display:inline-block text-capitalize">{{data.status}}</span>
+                            </div>
+                            <div class="details mb-2">
+                                <span class="text-uppercase d-inline-block width-100">Service:</span>
+                                <span class="display:inline-block">{{data.service_type}}</span>
+                            </div>
+                            <div class="details mb-2">
+                                <span class="text-uppercase d-inline-block width-100">Pet:</span>
+                                <span class="display:inline-block">{{data.pets}}</span>
+                            </div>
+                            <div class="details mb-2">
+                                <span class="text-uppercase d-inline-block width-100">From:</span>
+                                <span class="display:inline-block">{{data.fromdate}}</span>
+                            </div>
+                            <div class="details mb-2">
+                                <span class="text-uppercase d-inline-block width-100">To:</span>
+                                <span class="display:inline-block">{{data.todate}}</span>
+                            </div>
+                            <div class="details mb-2">
+                                <span class="text-uppercase d-inline-block width-100">Time:</span>
+                                <span class="display:inline-block">{{data.time}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card>
+                <mat-card class="mt-2 cus-mat-card">
+                    <div class="sub-total-header d-flex">
+                        <span
+                            class="pet-name d-inline-block align-middle text-capitalize">{{data.petDetails[0].pet}}</span>
+                        <span class="line d-inline-block align-middle m-auto"></span>
+                        <span class="sub-total d-inline-block align-middle">Sub Total</span>
+                    </div>
+                    <div class="rate-block  rate-block d-flex  justify-content-end mb-3"
+                        *ngFor="let detail of data.petDetails">
+                        <div class="rate-details d-inline-block w-75 text-center">
+                            <div class="text-capitalize">{{detail.petname}}</div>
+                            <div>${{detail.rate}} x {{detail.totalhours}}hr</div>
+                        </div>
+                        <button class="btn cus-btn font-weight-bold">${{detail.totslAmount}}</button>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+        <div class="post-btn">
+            <button mat-raised-button type="button" color="warn" class="add-btn"
+                [routerLink]="['/booking-service']">Close</button>
+        </div>
+    </div>
+
+</div>
+<div class="isLoading" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
+</div>

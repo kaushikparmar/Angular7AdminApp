@@ -1,0 +1,155 @@
+.app-component {
+  .notlOGIN{
+    transition: all 200ms ease;
+    margin-left: 54px !important;
+  }
+  
+  .login .panelClose{
+    margin-left: 0 !important;
+  }
+  .panelClose{
+    transition: all 200ms ease;
+    margin-left: 204px !important;
+  }
+  mat-toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+    .settings-icon,
+    .menu-icon {
+      margin-right: 15px;
+      cursor: pointer;
+    }
+    img{
+      width: 120px;
+    height: 100%;
+    padding: 5px 0;
+    }
+    .menu-icon {
+      margin-left: 45px;
+    }
+    .spacer {
+      flex: 1 1 auto;
+    }
+  }
+  mat-toolbar.mat-toolbar-single-row {
+    max-height: 50px;
+    height: 50px;
+  }
+  mat-sidenav-container {
+    mat-sidenav{
+      mat-nav-list {
+      .mat-list-item-content{
+        width: 100%;
+        padding:0 8px;
+      }
+      mat-label{
+          line-height:1.2 !important;
+          overflow: hidden;
+          white-space: normal;
+          word-wrap: break-word;
+          margin:0 8px;
+      }
+      .sub-text{
+        padding-left: 24px;
+        font : {
+          size: 14px !important;
+        }
+      }
+      ul.sidebar-menu{
+          li{
+              a{
+                border-bottom: 0.7px solid #eee;
+                  .custom-arrow{
+                      color:#96989a;
+                      position: absolute;
+                      right: 0;
+                      margin: auto;
+                      width: 24px;
+                  }
+                  svg{
+                    flex:0 0 20px;
+                  }
+                  .linkText{
+                    transition: opacity .35s linear,visibility 0.35s linear;
+                  }
+                  .up-arrow{
+                      opacity:0;
+                      visibility:hidden;
+                      transition: opacity .35s linear,visibility 0.35s linear;
+                  }
+                  .down-arrow{
+                      opacity:1;
+                      visibility:visible;
+                      transition: opacity .35s linear,visibility 0.35s linear;
+                  }
+                  &.active{
+                      color:#23BECD;
+                      font-weight: 600;
+                      .sidebar-icon{
+                        color: #23BECD;
+                      }
+                      .custom-arrow{
+                          color:#23BECD;
+                      }
+                  }
+              }
+              & .sub-menu{
+                  overflow: hidden;
+                  transition: .35s;
+                  max-height:0;
+                  li{
+                      background:#fff;
+                      transition: background .1s linear;
+                      position:relative;
+                      &:hover{
+                          background:#eee;
+                      }
+                  }
+              }
+              & .sub-menu.open{
+                max-height:500px;
+                transform: none;
+
+            }
+            &.open{
+              a{
+                  .up-arrow{
+                      opacity:1;
+                      visibility:visible;
+                  }
+                  .down-arrow{
+                      opacity:0;
+                      visibility:hidden;
+                  }
+              }
+
+          }
+
+        }
+        &.in{
+              .linkText{
+                display: none;
+              }
+              .up-arrow,.down-arrow{
+                display: none;
+              }
+              .sub-menu{
+             display: none;
+              }
+            }
+        }
+      }
+    }
+    mat-sidenav-content {
+      .workspace{
+        background-color: #f1f5f8;
+        height: calc(100vh - 50px);
+      }
+    }
+  }
+
+}

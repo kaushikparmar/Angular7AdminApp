@@ -1,0 +1,126 @@
+<div class="pb-home-banner-list custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/faq']">Home Banner</a>
+    </mat-label>
+    <mat-label>></mat-label>
+
+    <mat-label>List</mat-label>
+  </mat-nav-list>
+  <div class="pb-table-wraper">
+    <div class="filter-section">
+      <form #searchReward="ngForm" (submit)="getHomeBannerList()">
+        <div class="listing-form d-flex justify-content-between align-items-center">
+          <div class="search-box">
+            <mat-form-field class="mat-form-field">
+              <mat-label>Search</mat-label>
+              <input matInput name="search" [(ngModel)]="tableConfig.searchString" />
+              <!--
+              <mat-error *ngIf="login_id.hasError('required')">
+                Login ID is <strong>required</strong>
+              </mat-error>
+            -->
+              <!-- <mat-icon class="settings-icon unselectable">search</mat-icon> -->
+            </mat-form-field>
+            <button mat-raised-button type="submit" color="primary" class="search-btn">Search</button>
+          </div>
+          <div class="right-side-btn d-flex align-items-center">
+
+            <div class="add-div">
+              <button mat-raised-button color="primary" class="add-btn" [routerLink]="['/home-banner/add']">Add Home
+                Banner</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="pb-table">
+      <div class="mat-elevation-z8">
+
+        <table mat-table [dataSource]="dataSource" matSort>
+          <!-- Banner Image -->
+          <ng-container matColumnDef="banner">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Banner</th>
+            <td mat-cell *matCellDef="let ads">
+              <div class="lookupimage-box-box" *ngIf="ads.banner" style="height:70px;width:80px;padding:10px">
+                <img src="{{environmentImageSource?.origin}}/upload/{{ads?.banner}}" style="height:100%;width:100%;">
+              </div>
+              <div class="lookupimage-box-box" *ngIf="!ads.banner" style="height:70px;width:80px;padding:10px">
+                <img src="./assets/no-image.png" style="height:100%;width:100%;">
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Banner Column -->
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+            <td mat-cell *matCellDef="let banner">
+              <span *ngIf="banner?.title">{{banner?.title}}</span>
+              <span *ngIf="!banner?.title">-</span>
+            </td>
+          </ng-container>
+
+
+          <!-- Section Column -->
+          <ng-container matColumnDef="section">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Section</th>
+            <td mat-cell *matCellDef="let ads">
+              <span *ngIf="ads?.section">{{ads?.section}}</span>
+              <span *ngIf="!ads?.section">-</span>
+            </td>
+          </ng-container>
+
+
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <td mat-cell *matCellDef="let banner">{{ banner.status === true ?  'Active'  :  'Inactive' }}</td>
+          </ng-container>
+
+
+
+
+          <!-- Created By Column -->
+          <ng-container matColumnDef="created_at">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Created At</th>
+            <td mat-cell *matCellDef="let ads">
+              <span *ngIf="ads?.created_at">{{ ads.created_at | date: 'MM-dd-yyyy' }}</span>
+              <span *ngIf="!ads?.created_at">-</span>
+            </td>
+          </ng-container>
+
+          <!-- Star Column -->
+          <ng-container matColumnDef="menu">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let banner">
+              <mat-menu #appMenu="matMenu">
+
+                <button mat-menu-item (click)="viewDetail(banner)">View</button>
+                <button mat-menu-item (click)="edit(banner)">Edit</button>
+                <button mat-menu-item (click)="openDialog(banner)">Delete</button>
+                <button mat-menu-item
+                  (click)="openDialogForStatus(banner)">{{banner.status === false ? 'Active' : 'Inactive'}}</button>
+              </mat-menu>
+              <button mat-icon-button [matMenuTriggerFor]="appMenu"
+                (click)="$event.preventDefault(); $event.stopPropagation()">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="viewDetail(row)"></tr>
+        </table>
+        <div class="no-records" *ngIf="TABLE_DATA?.length === 0">
+          No records found
+        </div>
+
+        <mat-paginator class="mat-paginator-sticky" [length]="tableConfig.totalRecords" [pageSizeOptions]="[10, 20, 30]"
+          showFirstLastButtons (page)="pageChanged($event)"></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

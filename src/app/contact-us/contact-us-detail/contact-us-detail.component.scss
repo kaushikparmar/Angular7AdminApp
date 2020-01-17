@@ -1,0 +1,12 @@
+.contact-details-section{
+  .mat-form-field{
+    width: 100%;
+  }
+  .custom-disabled-label{
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 13px;
+    & + div {
+      color:black;
+    }
+  }
+}

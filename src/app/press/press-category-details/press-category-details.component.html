@@ -1,0 +1,48 @@
+<div class="add-press-category-container custom-padding">
+    <mat-nav-list class="custom-nav-list">
+        <mat-label>
+          <a [routerLink]="['/press-category/press-category-list']">Press Category</a>
+        </mat-label>
+        <mat-label>></mat-label>
+        <mat-label *ngIf="urlInfo.currentState === constants.addRouteUrl">Add Category</mat-label>
+        <mat-label *ngIf="urlInfo.currentState === constants.editRouteUrl">Edit Category</mat-label>
+        <!-- <mat-label *ngIf="urlInfo.currentState === constants.viewRouteUrl">View Category</mat-label> -->
+        <!-- <mat-label *ngIf="urlInfo.currentState === constants.viewRouteUrl">View press</mat-label> -->
+      </mat-nav-list>
+  <!-- <label class="custom-header" *ngIf="urlInfo.currentState === constants.addRouteUrl">
+    Add New Category
+  </label>
+  <label class="custom-header" *ngIf="urlInfo.currentState === constants.editRouteUrl">
+    Edit Category
+  </label> -->
+
+  <form #UserForm="ngForm" (ngSubmit)="saveBlogCategory(UserForm)" novalidate class="custom-form-padding">
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-6">
+
+    <mat-form-field>
+        <input matInput placeholder="Title" name="title" [(ngModel)]="blogData.title" maxlength="255" required
+        autocomplete="off" pattern="^[a-zA-Z][a-zA-Z\s]+$" [disabled]="urlInfo.currentState === constants.viewRouteUrl" #title = "ngModel">
+        <mat-error *ngIf="title?.errors?.required">
+            Title is required
+        </mat-error>
+        <mat-error *ngIf="title?.errors?.pattern">
+            Invalid title format
+        </mat-error>
+      </mat-form-field>
+      </div>
+    </div>
+
+
+    <div class="post-btn">
+      <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="urlInfo.currentState !== constants.viewRouteUrl">Save</button>
+      <!-- <button mat-raised-button type="submit" color="primary" class="add-btn" (click)="is_published =  true" *ngIf="urlInfo.currentState !== constants.viewRouteUrl">Save & Publish</button> -->
+      <button mat-raised-button type="button" color="warn" class="add-btn" [routerLink]="['/press-category', 'press-category-list']" *ngIf="urlInfo.currentState !== constants.viewRouteUrl">Cancel</button>
+      <button mat-raised-button type="button" color="warn" class="add-btn" [routerLink]="['/press-category', 'press-category-list']" *ngIf="urlInfo.currentState === constants.viewRouteUrl">Close</button>
+    </div>
+  </form>
+
+</div>
+<div class="isLoading" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
+</div>

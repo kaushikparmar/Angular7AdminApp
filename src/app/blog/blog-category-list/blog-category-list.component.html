@@ -1,0 +1,143 @@
+<div class="pb-blog-list-component custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/blog-category']">Blog Category</a>
+    </mat-label>
+    <mat-label>></mat-label>
+    <mat-label class="text-uppercase">List</mat-label>
+  </mat-nav-list>
+  <div class="pb-table-wraper">
+    <div class="filter-section" [class.opened]="searchPanel">
+      <form #searchUser="ngForm" (submit)="getBlogsList()">
+        <div class="listing-form d-flex justify-content-between align-items-center">
+          <div class="search-box">
+            <mat-form-field class="mat-form-field">
+
+              <mat-label>Search</mat-label>
+              <input matInput name="search" autocomplete="off" [(ngModel)]="tableConfig.searchString" />
+              <!-- <mat-icon class="settings-icon unselectable">search</mat-icon> -->
+            </mat-form-field>
+            <button mat-raised-button type="submit" color="primary" class="search-btn">Search</button>
+          </div>
+          <div class="right-side-btn d-flex align-items-center">
+            <div class="add-div">
+              <button mat-raised-button [routerLink]="['/blog-category', 'add-blog-category']" color="primary" class="add-btn">Add
+                Blog Category</button>
+            </div>
+            <div class="filter-btn">
+              <button mat-raised-button color="primary" type="button" class="filter-list-icon"
+              (click)="searchPanel = !searchPanel">
+                Filter
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="advanced-search-form">
+					<form class="search-form-padding">
+						<div class="row">
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Title</mat-label>
+									<input matInput [(ngModel)]="filterTitle" name="filterTitle" />
+								</mat-form-field>
+							</div>
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Status</mat-label>
+									<mat-select value="Select status" [(ngModel)]="selectedStatus" name="selectedStatus">
+										<mat-option value="Select status">
+											Select status
+										</mat-option>
+										<mat-option value="true">
+											Active
+										</mat-option>
+										<mat-option value="false">
+											Inactive
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+							</div>
+						</div>
+						<div class="advanced-search-btn">
+							<button mat-raised-button type="submit" color="primary" class="search-btn" (click)="getBlogsList();">Search</button>
+							<button mat-raised-button type="button" color="warn" class="clear-btn" (click)="clearFilter();">Clear</button>
+						</div>
+					</form>
+				</div>
+    </form>
+  </div>
+  <div class="pb-table">
+    <div class="mat-elevation-z8">
+      <!--
+          <mat-form-field class="mat-form-field">
+            <mat-label>Search</mat-label>
+            <input matInput name="search">
+          </mat-form-field>
+        -->
+      <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header="title">Title</th>
+          <td mat-cell *matCellDef="let category" class="text-capitalize">{{ category.title }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="status">Status</th>
+            <td mat-cell *matCellDef="let category">
+                <span *ngIf="category.status === 1">Active</span>
+                <span *ngIf="category.status !== 1">Inactive</span>
+            </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="created">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="created_at">Created On</th>
+            <td mat-cell *matCellDef="let category">{{ category?.created_at | date: 'MM-dd-yyyy' }}</td>
+          </ng-container>
+
+
+
+        <!-- Star Column -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let category">
+            <mat-menu #appMenu="matMenu">
+              <button mat-menu-item [routerLink]="['/blog-category/edit-blog-category/'+category.id]">Edit</button>
+              <button mat-menu-item *ngIf="category.status === 0"
+                (click)="openDialog(category, 'Active', null)">Active</button>
+              <button mat-menu-item *ngIf="category.status === 1"
+                (click)="openDialog(category, 'Deactive', null)">Inactive</button>
+              <!-- <button mat-menu-item (click)="onDeleteBlog(category)">Delete</button> -->
+            </mat-menu>
+            <button mat-icon-button [matMenuTriggerFor]="appMenu"
+              (click)="$event.preventDefault(); $event.stopPropagation()">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <!--(click)="edit(row)"-->
+      </table>
+      <div class="no-records" *ngIf="TABLE_DATA?.length === 0">
+        No records found
+      </div>
+
+      <mat-paginator
+          class="mat-paginator-sticky"
+          [length]="tableConfig.totalRecords"
+          [pageSizeOptions]="[10, 20, 30]"
+          showFirstLastButtons
+          (page)="pageChanged($event)"
+        ></mat-paginator>
+    </div>
+  </div>
+</div>
+</div>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

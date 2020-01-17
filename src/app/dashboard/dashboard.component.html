@@ -1,0 +1,439 @@
+<div class="container-fluid dashboard-wrapper custom-padding">
+  <div class="row">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-6 col-sm-4 col-md-4 col-lg-4">
+          <mat-card class="custom-card custom-bg">
+            <mat-card-content>
+              <h3>Total Booking</h3>
+              <label *ngIf="bookingCount">{{bookingCount}}</label>
+              <label *ngIf="!bookingCount">0</label>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-6 col-sm-4 col-md-4 col-lg-4">
+          <mat-card class="custom-card custom-bg">
+            <mat-card-content>
+              <h3>Total Pet Owner</h3>
+              <label *ngIf="petOwnerCount">{{petOwnerCount}}</label>
+              <label *ngIf="!petOwnerCount">0</label>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-6 col-sm-4 col-md-4 col-lg-4">
+          <mat-card class="custom-card custom-bg">
+            <mat-card-content>
+              <h3>Total Service Provider</h3>
+              <label *ngIf="serviceProviderCount">{{serviceProviderCount}}</label>
+              <label *ngIf="!serviceProviderCount">0</label>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-6 col-sm-4 col-md-4 col-lg-4">
+          <mat-card class="custom-card custom-bg">
+            <mat-card-content>
+              <h3>Total Transaction</h3>
+              <label *ngIf="transactionCount">${{transactionCount}}</label>
+              <label *ngIf="!transactionCount">0</label>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-6 col-sm-4 col-md-4 col-lg-4">
+          <mat-card class="custom-card custom-bg">
+            <mat-card-content>
+              <h3>Total Enquiries</h3>
+              <label *ngIf="messageCount">{{messageCount}}</label>
+              <label *ngIf="!messageCount">0</label>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-6 col-sm-4 col-md-4 col-lg-4">
+          <mat-card class="custom-card custom-bg">
+            <mat-card-content>
+              <h3>Total Lost & Found</h3>
+              <label *ngIf="lostnFoundCount"> {{lostnFoundCount}}</label>
+              <label *ngIf="!lostnFoundCount">0</label>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="row">
+          <div class="col-12 col-sm-6 col-md-6">
+              <mat-card class="custom-card p-0 border-0 user-reg-card">
+                <mat-card-header class="d-flex justify-content-between w-100">
+                  <mat-card-title class="mb-0">User Registration</mat-card-title>
+                  <mat-label class="mat-label view-all d-flex align-items-center mx-3 c-pointer"
+                  routerLink="/user">View All</mat-label>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="data-table">
+                        <div class="mat-elevation-z8">
+                          <table mat-table [dataSource]="latestUsers" class="w-100">
+                            <ng-container matColumnDef="first_name">
+                              <th mat-header-cell *matHeaderCellDef >Name</th>
+                              <td mat-cell *matCellDef="let table1"  class="text-capitalize">{{ table1.name }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="type">
+                                <th mat-header-cell *matHeaderCellDef >Type</th>
+                                <td mat-cell *matCellDef="let table1"  class="text-capitalize">{{ table1.fk_user_role.type }}</td>
+                              </ng-container>
+                            <ng-container matColumnDef="email_id">
+                                <th mat-header-cell *matHeaderCellDef >Email</th>
+                                <td mat-cell *matCellDef="let table1">{{ table1.email }}</td>
+                            </ng-container>
+                   
+                            <ng-container matColumnDef="phone">
+                              <th mat-header-cell *matHeaderCellDef >Phone</th>
+                              <td mat-cell *matCellDef="let table1">
+                                <span *ngIf="table1.mobile">{{ table1.mobile }}</span>
+                                <span *ngIf="!table1.mobile">-</span> 
+                              </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns1; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns1"></tr>
+                          </table>
+                          <div class="no-records" *ngIf="latestUsers?.length === 0">
+                            No records found
+                          </div>
+                        </div>
+                      </div>
+                </mat-card-content>
+              </mat-card>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-6">
+              <mat-card class="custom-card p-0 border-0">
+                  <mat-card-header class="d-flex justify-content-between w-100">
+                      <mat-card-title class="mb-0">Booking</mat-card-title>
+                      <mat-label class="mat-label view-all d-flex align-items-center mx-3 c-pointer"
+                      routerLink="/booking-service">View All</mat-label>
+                    </mat-card-header>
+                <mat-card-content>
+                    <div class="data-table">
+                        <div class="mat-elevation-z8">
+                          <table mat-table [dataSource]="latestBookings" class="w-100">
+                            <ng-container matColumnDef="service">
+                              <th mat-header-cell *matHeaderCellDef >Service</th>
+                              <td mat-cell *matCellDef="let table3" class="text-capitalize">{{ table3.service_type }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="owner_name">
+                              <th mat-header-cell *matHeaderCellDef >Pet owner</th>
+                              <td mat-cell *matCellDef="let table3" class="text-capitalize">{{ table3.pet_owner }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="provider_name">
+                                <th mat-header-cell *matHeaderCellDef >Service provider</th>
+                                <td mat-cell *matCellDef="let table3" class="text-capitalize">{{ table3.service_provider }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="amount">
+                                <th mat-header-cell *matHeaderCellDef >Amount</th>
+                                <td mat-cell *matCellDef="let table3">${{ table3.total_amount }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef >Status</th>
+                                <td mat-cell *matCellDef="let table3" class="text-capitalize">{{ table3.payment_status }}</td>
+                            </ng-container>
+                            <!-- <ng-container matColumnDef="action">
+                              <th mat-header-cell *matHeaderCellDef></th>
+                              <td mat-cell *matCellDef="let table1">
+                                <mat-menu #appMenu="matMenu">
+                                  <button mat-menu-item>View</button>
+                                  <button mat-menu-item>Edit</button>
+                                </mat-menu>
+                                <button mat-icon-button [matMenuTriggerFor]="appMenu"
+                                  (click)="$event.preventDefault(); $event.stopPropagation()">
+                                  <mat-icon>more_vert</mat-icon>
+                                </button>
+                              </td>
+                            </ng-container> -->
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns2; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns2"></tr>
+                          </table>
+                          <div class="no-records" *ngIf="latestBookings?.length === 0">
+                            No records found
+                          </div>
+                        </div>
+                      </div>
+                </mat-card-content>
+              </mat-card>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-6">
+              <mat-card class="custom-card p-0 border-0">
+                  <mat-card-header class="d-flex justify-content-between w-100">
+                      <mat-card-title class="mb-0">Lost & Found</mat-card-title>
+                      <mat-label class="mat-label view-all d-flex align-items-center mx-3 c-pointer"
+                      routerLink="/lost-and-found">View All</mat-label>
+                    </mat-card-header>
+                <mat-card-content>
+                    <div class="data-table">
+                        <div class="mat-elevation-z8">
+                          <table mat-table [dataSource]="latestLostnFounds" class="w-100">
+                            <ng-container matColumnDef="date">
+                              <th mat-header-cell *matHeaderCellDef >date</th>
+                              <td mat-cell *matCellDef="let table3">{{ table3.created_at | date:'MM-dd-yyyy'}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="type">
+                                <th mat-header-cell *matHeaderCellDef >type</th>
+                                <td mat-cell *matCellDef="let table3" class="text-capitalize">{{ table3.type }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="prt_type">
+                                <th mat-header-cell *matHeaderCellDef >prt type</th>
+                                <td mat-cell *matCellDef="let table3" class="text-capitalize">{{ table3.pet_detail.type }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="user">
+                                <th mat-header-cell *matHeaderCellDef >user</th>
+                                <td mat-cell *matCellDef="let table3" class="text-capitalize">{{ table3.name }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="location">
+                                <th mat-header-cell *matHeaderCellDef >location</th>
+                                <td mat-cell *matCellDef="let table3" class="text-capitalize">
+                                  <span *ngIf="table3.user_detail.address1">{{ table3.user_detail.address1 }}</span>
+                                  <span *ngIf="!table3.user_detail.address1">-</span>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns3; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns3"></tr>
+                          </table>
+                          <div class="no-records" *ngIf="latestLostnFounds?.length === 0">
+                            No records found
+                          </div>
+                        </div>
+                      </div>
+                </mat-card-content>
+              </mat-card>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-6">
+              <mat-card class="custom-card p-0 border-0">
+                  <mat-card-header class="d-flex justify-content-between w-100">
+                      <mat-card-title class="mb-0">Enquiries</mat-card-title>
+                      <mat-label class="mat-label view-all d-flex align-items-center mx-3 c-pointer" routerLink="/contact-us">View All</mat-label>
+                    </mat-card-header>
+                <mat-card-content>
+                    <div class="data-table">
+                        <div class="mat-elevation-z8">
+                          <table mat-table [dataSource]="latestEnquiries" class="w-100">
+                            <ng-container matColumnDef="date">
+                              <th mat-header-cell *matHeaderCellDef >Date</th>
+                              <td mat-cell *matCellDef="let enquiries">{{ enquiries.created_at | date:'MM-dd-yyyy' }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="topic">
+                                <th mat-header-cell *matHeaderCellDef >Topic</th>
+                                <td mat-cell *matCellDef="let enquiries" class="text-capitalize">{{ enquiries.category.name }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="user">
+                                <th mat-header-cell *matHeaderCellDef >User</th>
+                                <td mat-cell *matCellDef="let enquiries" class="text-capitalize">{{ enquiries.name }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="email">
+                                <th mat-header-cell *matHeaderCellDef >Email</th>
+                                <td mat-cell *matCellDef="let enquiries">{{ enquiries.email }}</td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns4; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns4"></tr>
+                          </table>
+                          <div class="no-records" *ngIf="latestEnquiries?.length === 0">
+                            No records found
+                          </div>
+                        </div>
+                      </div>
+                </mat-card-content>
+              </mat-card>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-6">
+              <mat-card class="custom-card p-0 border-0">
+                  <mat-card-header class="d-flex justify-content-between w-100">
+                      <mat-card-title class="mb-0">Reward History</mat-card-title>
+                      <mat-label class="mat-label view-all d-flex align-items-center mx-3 c-pointer"
+                      routerLink="/reward-history">View All</mat-label>
+                    </mat-card-header>
+                <mat-card-content>
+                    <div class="data-table">
+                        <div class="mat-elevation-z8">
+                          <table mat-table [dataSource]="latestRewards" class="w-100">
+                            <ng-container matColumnDef="date">
+                              <th mat-header-cell *matHeaderCellDef >Date</th>
+                              <td mat-cell *matCellDef="let rewards">{{ rewards.created_at | date:'MM-dd-yyyy' }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="user">
+                                <th mat-header-cell *matHeaderCellDef >User</th>
+                                <td mat-cell *matCellDef="let rewards" class="text-capitalize">{{ rewards.user.name }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="event">
+                                <th mat-header-cell *matHeaderCellDef >Event</th>
+                                <td mat-cell *matCellDef="let rewards" class="text-capitalize">{{ rewards.event_name }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="point">
+                                <th mat-header-cell *matHeaderCellDef >Points</th>
+                                <td mat-cell *matCellDef="let rewards">{{ rewards.event_amount }}</td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns5; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns5"></tr>
+                          </table>
+                          <div class="no-records" *ngIf="latestRewards?.length === 0">
+                            No records found
+                          </div>
+                        </div>
+                      </div>
+                </mat-card-content>
+              </mat-card>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-6">
+              <mat-card class="custom-card p-0 border-0">
+                  <mat-card-header class="d-flex justify-content-between w-100">
+                      <mat-card-title class="mb-0">Transaction History</mat-card-title>
+                      <mat-label class="mat-label view-all d-flex align-items-center mx-3 c-pointer">View All</mat-label>
+                    </mat-card-header>
+                <mat-card-content>
+                    <div class="data-table">
+                        <div class="mat-elevation-z8">
+                          <table mat-table [dataSource]="latestTransactions" class="w-100">
+                            <ng-container matColumnDef="date">
+                              <th mat-header-cell *matHeaderCellDef >Date</th>
+                              <td mat-cell *matCellDef="let transaction">{{ transaction.created_at | date:'MM-dd-yyyy' }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="tran_id">
+                                <th mat-header-cell *matHeaderCellDef >Transaction ID</th>
+                                <td mat-cell *matCellDef="let transaction">{{ transaction.id }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="amount">
+                                <th mat-header-cell *matHeaderCellDef >Amount</th>
+                                <td mat-cell *matCellDef="let transaction">{{ transaction.amount }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="commission">
+                                <th mat-header-cell *matHeaderCellDef >Commission</th>
+                                <td mat-cell *matCellDef="let transaction">{{ transaction.service_booking.service_fees }}</td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns6; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns6"></tr>
+                          </table>
+                          <div class="no-records" *ngIf="latestTransactions?.length === 0">
+                            No records found
+                          </div>
+                        </div>
+                      </div>
+                </mat-card-content>
+              </mat-card>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-6">
+              <mat-card class="custom-card p-0 border-0">
+                <mat-card-header class="d-flex justify-content-between w-100">
+                  <mat-card-title class="mb-0">Top 5 Pet Owner</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="data-table">
+                        <div class="mat-elevation-z8">
+                          <table mat-table [dataSource]="topPetOwner" class="w-100">
+                            <ng-container matColumnDef="total_booking">
+                              <th mat-header-cell *matHeaderCellDef class="cust-width-th" >Total Booking</th>
+                              <td mat-cell *matCellDef="let pet_owner">{{ pet_owner.pet_owner_count }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef >Name</th>
+                                <td mat-cell *matCellDef="let pet_owner" class="text-capitalize">{{ pet_owner.name }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="email">
+                                <th mat-header-cell *matHeaderCellDef >Email</th>
+                                <td mat-cell *matCellDef="let pet_owner">{{ pet_owner.email }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="cost">
+                                <th mat-header-cell *matHeaderCellDef >Cost</th>
+                                <td mat-cell *matCellDef="let pet_owner">${{ pet_owner.amount }}</td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns7; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns7"></tr>
+                          </table>
+                          <div class="no-records" *ngIf="topPetOwner?.length === 0">
+                            No records found
+                          </div>
+                        </div>
+                      </div>
+                </mat-card-content>
+              </mat-card>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-6">
+              <mat-card class="custom-card p-0 border-0">
+                <mat-card-header class="d-flex justify-content-between w-100">
+                  <mat-card-title class="mb-0">Top 5 Service Giver</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="data-table">
+                        <div class="mat-elevation-z8">
+                          <table mat-table [dataSource]="topServiceProvider" class="w-100">
+                            <ng-container matColumnDef="total_booking">
+                              <th mat-header-cell *matHeaderCellDef  class="cust-width-th" >Total Booking</th>
+                              <td mat-cell *matCellDef="let service_giver">{{ service_giver.service_provider_count }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef >Name</th>
+                                <td mat-cell *matCellDef="let service_giver"  class="text-capitalize">{{ service_giver.name }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="email">
+                                <th mat-header-cell *matHeaderCellDef >Email</th>
+                                <td mat-cell *matCellDef="let service_giver">{{ service_giver.email }}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="cost">
+                                <th mat-header-cell *matHeaderCellDef >Cost</th>
+                                <td mat-cell *matCellDef="let service_giver">${{ service_giver.amount }}</td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns8; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns8"></tr>
+                          </table>
+                          <div class="no-records" *ngIf="topServiceProvider?.length === 0">
+                            No records found
+                          </div>
+                        </div>
+                      </div>
+                </mat-card-content>
+              </mat-card>
+          </div>
+
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="row">
+          <div class="col-12 col-sm-6 col-md-6">
+              <mat-card class="custom-card custom-bg">
+                <mat-card-content class="custom-card-content">
+                  <!-- <ngx-charts-area-chart (window:resize)="onResize($event)"  [scheme]="colorScheme" [results]="multi" [gradient]="gradient"
+                    [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+                    [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel"
+                    [autoScale]="autoScale">
+                  </ngx-charts-area-chart> -->
+                  <ngx-charts-bar-vertical-stacked
+                  [view]="view1"
+                  [scheme]="colorScheme"
+                  [results]="multi"
+                  [gradient]="gradient"
+                  [xAxis]="showXAxis"
+                  [yAxis]="showYAxis"
+                  [legend]="showLegend"
+                  [showXAxisLabel]="showXAxisLabel"
+                  [showYAxisLabel]="showYAxisLabel"
+                  [xAxisLabel]="xAxisLabel"
+                  [yAxisLabel]="yAxisLabel">
+                </ngx-charts-bar-vertical-stacked>
+                </mat-card-content>
+              </mat-card>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6">
+              <mat-card class="custom-card custom-bg">
+                <mat-card-content class="custom-card-content">
+                  <ngx-charts-pie-chart  [scheme]="colorScheme" [results]="single" [legend]="showLegend"
+                    [explodeSlices]="explodeSlices" [labels]="showLabels" [doughnut]="doughnut" [gradient]="gradient">
+                  </ngx-charts-pie-chart>
+                </mat-card-content>
+              </mat-card>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>

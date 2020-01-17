@@ -1,0 +1,161 @@
+<section class="custom-ads-details-section custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/custom-ads/list']">Custom Ads</a>
+    </mat-label>
+    <mat-label>></mat-label>
+    <mat-label *ngIf="path === 'add'">Add </mat-label>
+    <mat-label *ngIf="path === 'edit'">Edit </mat-label>
+    <mat-label *ngIf="path === 'view'">View </mat-label>
+  </mat-nav-list>
+
+
+  <form #customAdsForm="ngForm" (ngSubmit)="crudCustomAds(customAdsForm.valid)" novalidate class="custom-form-padding">
+
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-6">
+
+        <mat-form-field>
+          <mat-select placeholder="Select Section" required name="section" #section="ngModel" required
+            [(ngModel)]="customAdsData.section" [disabled]="path==='view'">
+            <mat-option *ngFor="let topic of fetchSectionData" [value]="topic.name">
+              {{topic.type}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="section?.errors?.required && (section.dirty || section.touched  || isSubmited)">
+            Section is required
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Link"
+            pattern="^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+            required name="link" type="url" #link="ngModel" [(ngModel)]="customAdsData.link" [disabled]="path==='view'">
+          <mat-error *ngIf="link?.errors?.required && (link.dirty || link.touched  || isSubmited)">
+            Link is required
+          </mat-error>
+          <mat-error *ngIf="link?.errors?.pattern && (link.dirty || link.touched  || isSubmited)">
+            Not valid link example - https://www.google.com
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-6">
+
+        <mat-form-field>
+          <input matInput name="fromdate" readonly [(ngModel)]="customAdsData.fromdate" [disabled]="path==='view'"
+            [matDatepicker]="from"  [min]="todayDate" [max]="customAdsData.todate" placeholder="From date"
+            #fromDate="ngModel">
+            <label class="d-flex align-items-center mb-0 mt-2" *ngIf="!customAdsData.todate   && path === 'view'">
+              NA
+            </label>
+          <mat-error *ngIf="fromDate?.errors && (fromDate.dirty || fromDate.touched  || isSubmited)">
+            Please select from date that doesn't have smaller than todays date or larger than to date.
+          </mat-error>
+          <mat-datepicker-toggle matSuffix [for]="from"></mat-datepicker-toggle>
+          <mat-datepicker #from></mat-datepicker>
+
+
+
+        </mat-form-field>
+
+      </div>
+
+
+
+      <div class="col-12 col-sm-6 col-md-6">
+
+        <mat-form-field>
+          <input matInput [min]="setMinimumToDate(customAdsData.fromdate)" readonly [matDatepicker]="to" name="todate"
+            [(ngModel)]="customAdsData.todate" [disabled]="path==='view'" placeholder="To date"
+            #toDate="ngModel">
+            <label class="d-flex align-items-center mb-0 mt-2" *ngIf="!customAdsData.todate   && path === 'view'">
+              NA
+            </label>
+          <mat-error *ngIf="toDate?.errors && (toDate.dirty || toDate.touched  || isSubmited)">
+            Please select to date that doesn't have less than from date.
+          </mat-error>
+          <mat-datepicker-toggle matSuffix [for]="to"></mat-datepicker-toggle>
+          <mat-datepicker #to></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-sm-6 col-md-6">
+        <mat-form-field>
+          <input matInput placeholder="Sequence"
+            pattern="[0-9]*"
+            required name="sequence" type="number" #sequence="ngModel" [(ngModel)]="customAdsData.sequence" [disabled]="path==='view'">
+          <mat-error *ngIf="sequence?.errors?.required && (sequence.dirty || sequence.touched  || isSubmited)">
+            Sequence is required & should be a number.
+          </mat-error>
+          <mat-error *ngIf="sequence?.errors?.pattern && (sequence.dirty || sequence.touched  || isSubmited)">
+            Must be a number.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-sm-6 col-md-6">
+
+        <mat-form-field>
+          <textarea cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="10" matInput
+            pattern="^\S$|^\S[\s\S]*$" minlength="2" maxlength="250" [disabled]="path==='view'" placeholder="Notes"
+            #notes="ngModel" name="notes" [(ngModel)]="customAdsData.notes"></textarea>
+          <label class="d-flex align-items-center mb-0 mt-2" *ngIf="!customAdsData.notes   && path === 'view'">
+            NA
+          </label>
+
+          <mat-error
+            *ngIf="notes?.errors?.pattern && (notes.dirty || notes.touched  || isSubmited) && !notes?.errors?.minlength">
+            Invalid notes
+          </mat-error>
+
+        </mat-form-field>
+
+
+      </div>
+
+
+
+      <div class="col-12" [class.disableBanner]="!customAdsData.section" >
+        <div class="upload-photo-wrapper d-flex">
+          <label class="custom-label" *ngIf="path ==='view'" >Uploaded Banner:</label>
+          <div class='upload-btn ml-2 mr-auto' *ngIf="path!=='view'">
+            <input type='file' #uploadImageInput accept=".png, .jpg, .jpeg" name="image" id='upload-image1'
+              class='upload-input' (change)="fileUploads($event)" [disabled]="!customAdsData.section" />
+            <label class='mb-0 upload-text d-flex align-items-center' for='upload-images'>
+              <button>Upload banner</button>
+            </label>
+            <mat-error style="font-size: small" *ngIf="!customAdsData.imageUrl && isSubmited">
+                Image is required
+              </mat-error>
+          </div>
+          <div class="upload-img" *ngIf="customAdsData.imageUrl">
+            <mat-icon color="warn" (click)="removeImage();" *ngIf="path!=='view'">highlight_off</mat-icon>
+            <img [src]="customAdsData.imageUrl" alt="location-img">
+          </div>
+          <label class="d-flex align-items-center mb-0 mt-2" *ngIf="!customAdsData.imageUrl && path === 'view'">
+            NA
+          </label>
+        </div>
+      </div>
+
+    </div>
+    <div *ngIf="cron_note" class="text-danger  mt-3">
+      <b>Note: </b>{{cron_note}}
+    </div>
+    <div class="post-btn">
+      <button mat-raised-button type="submit" color="primary" class="add-btn" *ngIf="path!=='view'">Save as
+        Draft</button>
+      <button mat-raised-button type="submit" color="primary" class="add-btn"
+        (click)="customAdsData.is_published = true" *ngIf="path!== 'view'">Save & Publish</button>
+      <button mat-raised-button type="button" color="warn" class="add-btn" [routerLink]="['/custom-ads/list']"
+        *ngIf="path!== 'view'">Cancel</button>
+      <button mat-raised-button type="button" color="warn" class="add-btn" [routerLink]="['/custom-ads/list']"
+        *ngIf="path=== 'view'">Close</button>
+    </div>
+
+  </form>
+</section>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

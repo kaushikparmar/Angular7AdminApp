@@ -1,0 +1,140 @@
+<div class="pb-inappropriate-list-component custom-padding">
+	<mat-nav-list class="custom-nav-list">
+		<mat-label>
+			<a [routerLink]="['/inappropriate']">Inappropriate</a>
+		</mat-label>
+		<mat-label>></mat-label>
+		<mat-label>List</mat-label>
+	</mat-nav-list>
+	<div class="pb-table-wraper">
+		<div class="filter-section">
+			<form #searchUser="ngForm" (submit)="getUsers()">
+				<div class="listing-form d-flex justify-content-between align-items-center">
+					<div class="search-box">
+						<!-- <mat-form-field class="mat-form-field">
+							<mat-label>Search</mat-label>
+							<input matInput name="search" [(ngModel)]="tableConfig.searchString" />
+						</mat-form-field> -->
+						<mat-form-field>
+							<mat-label>Select status</mat-label>
+							<mat-select [(ngModel)]="selectedStatus" name="selectedStatus">
+									<mat-option value="Select status">
+											Select status
+									</mat-option>
+								<mat-option value="Active">
+									Active
+							  	</mat-option>
+							  	<mat-option value="Inactive">
+									Inactive
+								</mat-option>
+								<mat-option value="Blocked">
+										Blocked
+								</mat-option>
+								<mat-option value="Deleted">
+									Deleted
+								</mat-option>
+								<mat-option value="Spammed">
+										Spammed
+									</mat-option>  
+							</mat-select>
+						</mat-form-field>
+						<button mat-raised-button type="submit" color="primary" class="search-btn">Search</button>
+					</div>
+					
+					<div class="status-div">
+						<!-- <button mat-raised-button [routerLink]="['/user', 'add']" color="primary" class="add-btn" disabled>New</button> -->
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="pb-table">
+			<div class="mat-elevation-z8">
+				<table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+					<ng-container matColumnDef="id">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header="id"> Post Id </th>
+						<td mat-cell *matCellDef="let user" class="text-capitalize">
+							<span *ngIf="user.id">{{user.id}}</span>
+							<span *ngIf="!user.id">-</span>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="total_views">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header="total_views"> Views </th>
+						<td mat-cell *matCellDef="let user">
+							<span *ngIf="user.total_views !== undefined && user.total_views !== null">{{user.total_views}}</span>
+							<span *ngIf="user.total_views == undefined && user.total_views == null">-</span>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="total_comments">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header="total_comments"> Comments </th>
+						<td mat-cell *matCellDef="let user">
+							<span *ngIf="user.total_comments !== undefined && user.total_comments !== null">{{user.total_comments}}</span>
+							<span *ngIf="user.total_comments == undefined && user.total_comments == null">-</span>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="total_likes">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header="total_likes"> Likes </th>
+						<td mat-cell *matCellDef="let user">
+							<span *ngIf="user.total_likes !== undefined && user.total_likes !== null">{{user.total_likes}}</span>
+							<span *ngIf="user.total_likes == undefined && user.total_likes == null">-</span>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="total_share">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header="total_share"> Share </th>
+						<td mat-cell *matCellDef="let user">
+							<span *ngIf="user.total_share !== undefined && user.total_share !== null">{{user.total_share}}</span>
+							<span *ngIf="user.total_share == undefined && user.total_share == null">-</span>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="total_spam">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header="total_spam"> Spam </th>
+						<td mat-cell *matCellDef="let user">
+							<span *ngIf="user.total_spam !== undefined && user.total_spam !== null">{{user.total_spam}}</span>
+							<span *ngIf="user.total_spam == undefined && user.total_spam == null">-</span>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="created_at">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header="created_at"> Created On </th>
+						<td mat-cell *matCellDef="let user">
+							<span *ngIf="user.created_at">{{user.created_at | date: 'MM-dd-yyyy'}}</span>
+							<span *ngIf="!user.created_at">-</span>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="status">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+						<td mat-cell *matCellDef="let user">
+							<span *ngIf="user.status">{{user.status}}</span>
+							<span *ngIf="!user.status">-</span>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="is_active">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+						<td mat-cell *matCellDef="let user">
+							<mat-menu #appMenu="matMenu">
+								<button *ngIf="user.status !== 'Active'" mat-menu-item (click)="openDialog(user, 'Active')">Active</button>
+								<button *ngIf="user.status !== 'Blocked'" mat-menu-item (click)="openDialog(user, 'Blocked')">Blocked</button>
+								<button *ngIf="user.status !== 'Deleted'" mat-menu-item (click)="openDialog(user, 'Deleted')">Deleted</button>
+								<button *ngIf="user.status !== 'Inactive'" mat-menu-item (click)="openDialog(user, 'Inactive')">Inactive</button>
+								<button *ngIf="user.status !== 'Spammed'" mat-menu-item (click)="openDialog(user, 'Spammed')">Spammed</button>
+							</mat-menu>
+							<button mat-icon-button [matMenuTriggerFor]="appMenu"
+							(click)="$event.preventDefault(); $event.stopPropagation()">
+								<mat-icon>more_vert</mat-icon>
+							</button>
+						</td>
+					</ng-container>
+					<tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+					<tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="view(row)"></tr>
+				</table>
+				<div class="no-records" *ngIf="TABLE_DATA?.length === 0">
+					No records found
+				</div>
+				<mat-paginator class="mat-paginator-sticky" [length]="tableConfig.totalRecords" [pageSizeOptions]="[10, 20, 30]"
+				showFirstLastButtons (page)="pageChanged($event)">
+				</mat-paginator>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="isLoading" *ngIf="isLoading">
+	<mat-spinner></mat-spinner>
+</div>

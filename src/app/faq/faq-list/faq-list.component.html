@@ -1,0 +1,169 @@
+<div class="pb-faq-list custom-padding">
+	<mat-nav-list class="custom-nav-list">
+		<mat-label>
+			<a [routerLink]="['/faq']">Help</a>
+		</mat-label>
+		<mat-label>></mat-label>
+
+		<mat-label>List</mat-label>
+	</mat-nav-list>
+	<div class="pb-table-wraper">
+		<div class="filter-section" [class.opened]="searchPanel">
+			<form #searchFaq="ngForm" (submit)="getFaqs()">
+				<div class="listing-form d-flex justify-content-between align-items-center">
+					<div class="search-box">
+						<mat-form-field class="mat-form-field">
+							<mat-label>Search</mat-label>
+							<input matInput name="search" [(ngModel)]="tableConfig.searchString" />
+						</mat-form-field>
+						<button mat-raised-button type="submit" color="primary" class="search-btn">Search</button>
+					</div>
+					<div class="right-side-btn d-flex align-items-center">
+						<div class="add-div">
+							<button mat-raised-button [routerLink]="['/faq', 'add']" color="primary" class="add-btn">Add Help/FAQ</button>
+						</div>
+						<div class="filter-btn">
+							<button mat-raised-button color="primary" type="button" class="filter-list-icon"
+							(click)="searchPanel = !searchPanel">
+								Filter
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="advanced-search-form">
+					<form class="search-form-padding">
+						<div class="row">
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Topic name</mat-label>
+									<input matInput [(ngModel)]="topicName" name="topicName" />
+								</mat-form-field>
+							</div>
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Sub topic name</mat-label>
+									<input matInput [(ngModel)]="subTopicName" name="subTopicName"/>
+								</mat-form-field>
+							</div>
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Question</mat-label>
+									<input matInput [(ngModel)]="question" name="question"/>
+								</mat-form-field>
+							</div>
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Status</mat-label>
+									<mat-select value="Select status" [(ngModel)]="selectedStatus" name="selectedStatus">
+										<mat-option value="Select status">
+											Select status
+										</mat-option>
+										<mat-option value="true">
+											Active
+										</mat-option>
+										<mat-option value="false">
+											Inactive
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+							</div>
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Choose a startdate</mat-label>
+										<input matInput [matDatepicker]="picker1" [(ngModel)]="startDate" (ngModelChange)="changeStartDate();" name="startdate" disabled>
+										<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+										<mat-datepicker #picker1 disabled="false"></mat-datepicker>
+								</mat-form-field>
+							</div>
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Choose a enddate</mat-label>
+									<input matInput [matDatepicker]="picker2" [min]="startDate" [(ngModel)]="endDate" name="enddate" disabled>
+									<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+									<mat-datepicker #picker2 disabled="false"></mat-datepicker>
+								</mat-form-field>
+							</div>
+						</div>
+						<div class="advanced-search-btn">
+							<button mat-raised-button type="submit" color="primary" class="search-btn" (click)="filterSearch();">Search</button>
+							<button mat-raised-button type="button" color="warn" class="clear-btn" (click)="clearFilter();">Clear</button>
+						</div>
+					</form>
+				</div>
+			</form>
+		</div>
+		<div class="pb-table">
+			<div class="mat-elevation-z8">
+				<table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+					<ng-container matColumnDef="topic">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header="name&isTopic=true">Topic</th>
+						<td mat-cell *matCellDef="let faq">
+							<span *ngIf="faq.faq_topic_id.name">{{faq.faq_topic_id.name}}</span>
+							<span *ngIf="!faq.faq_topic_id.name">-</span>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="subtopic">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header="name&isTopic=false">Sub Topic</th>
+						<td mat-cell *matCellDef="let faq">
+							<span *ngIf="faq.faq_subtopic_id?.name">{{faq.faq_subtopic_id?.name}}</span>
+							<span *ngIf="!faq.faq_subtopic_id?.name">-</span>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="question">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header="question">Question</th>
+						<td mat-cell *matCellDef="let faq">
+							<span *ngIf="faq.question">{{faq.question}}</span>
+							<span *ngIf="!faq.question">-</span>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="image">
+						<th mat-header-cell *matHeaderCellDef>Image</th>
+						<td mat-cell *matCellDef="let faq">
+							<div class="custom-img" *ngIf="faq.imagePath">
+								<img [src]="faq.imagePath" alt="post image">
+							</div>
+							<span *ngIf="!faq.imagePath">-</span>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="isactive">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header="is_active">Status</th>
+						<td mat-cell *matCellDef="let faq">{{ faq.is_active === true ? 'Active' : 'Inactive' }}</td>
+					</ng-container>
+					<ng-container matColumnDef="created_at">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header="created_at">Created On</th>
+						<td mat-cell *matCellDef="let faq">{{ faq.created_at | date: 'MM-dd-yyyy' }}</td>
+					</ng-container>
+					<ng-container matColumnDef="updated_at">
+						<th mat-header-cell *matHeaderCellDef>Updated On</th>
+						<td mat-cell *matCellDef="let faq">{{ faq.updated_at | date: 'MM-dd-yyyy' }}</td>
+					</ng-container>
+					<ng-container matColumnDef="is_active">
+						<th mat-header-cell *matHeaderCellDef></th>
+						<td mat-cell *matCellDef="let faq">
+							<mat-menu #appMenu="matMenu">
+								<button mat-menu-item (click)="viewDetail(faq)">View</button>
+								<button mat-menu-item (click)="edit(faq)">Edit</button>
+								<button mat-menu-item (click)="openDialog(faq);" *ngIf="faq.is_active">Deactive</button>
+								<button mat-menu-item (click)="openDialog(faq);" *ngIf="!faq.is_active">Active</button>
+							</mat-menu>
+							<button mat-icon-button [matMenuTriggerFor]="appMenu"
+							(click)="$event.preventDefault(); $event.stopPropagation()">
+								<mat-icon>more_vert</mat-icon>
+							</button>
+						</td>
+					</ng-container>
+					<tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+					<tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="viewDetail(row)"></tr>
+				</table>
+				<div class="no-records" *ngIf="TABLE_DATA?.length === 0">
+					No records found
+				</div>
+				<mat-paginator class="mat-paginator-sticky" [length]="tableConfig.totalRecords" [pageSizeOptions]="[10, 20, 30]"
+				showFirstLastButtons (page)="pageChanged($event)"></mat-paginator>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="isLoading" *ngIf="isLoading">
+	<mat-spinner></mat-spinner>
+</div>

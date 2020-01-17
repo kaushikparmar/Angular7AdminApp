@@ -1,0 +1,163 @@
+<div class="pb-breed-list-component custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/breed']">Breed</a>
+    </mat-label>
+    <mat-label>></mat-label>
+    <mat-label>List</mat-label>
+  </mat-nav-list>
+  <div class="pb-table-wraper">
+    <div class="filter-section" [class.opened]="searchPanel">
+      <form #searchUser="ngForm" (submit)="getBreedList()" >
+        <div class="listing-form d-flex justify-content-between align-items-center">
+          <div class="search-box">
+            <mat-form-field class="mat-form-field">
+              <mat-label>Search</mat-label>
+              <input matInput name="search" [(ngModel)]="tableConfig.searchString" />
+            </mat-form-field>
+            <button mat-raised-button type="submit" color="primary" class="search-btn">Search</button>
+          </div>
+          <div class="right-side-btn d-flex align-items-center">
+            <div class="add-div">
+              <button mat-raised-button [routerLink]="['/breed', 'add']" color="primary" class="add-btn">Add
+                Breed</button>
+            </div>
+            <div class="filter-btn">
+              <button mat-raised-button color="primary" type="button" class="filter-list-icon"
+              (click)="searchPanel = !searchPanel">
+                Filter
+              </button>
+            </div>
+        </div>
+        </div>
+        <div class="advanced-search-form">
+					<form class="search-form-padding">
+						<div class="row">
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Title</mat-label>
+									<input matInput [(ngModel)]="filterName" name="filterName" />
+								</mat-form-field>
+              </div>
+              <div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Category</mat-label>
+									<mat-select value="Select Category" [(ngModel)]="filterCategory" name="filterCategory">
+										<mat-option value="Select Category">
+											Select Category
+										</mat-option>
+										<mat-option *ngFor="let option of categoriesOpt" [value]="option.id">
+											{{option.type | titlecase}}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+							</div>
+							<div class="col-12 col-sm-6 col-md-4">
+								<mat-form-field>
+									<mat-label>Status</mat-label>
+									<mat-select value="Select status" [(ngModel)]="selectedStatus" name="selectedStatus">
+										<mat-option value="Select status">
+											Select status
+										</mat-option>
+										<mat-option value="true">
+											Active
+										</mat-option>
+										<mat-option value="false">
+											Inactive
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+							</div>
+						</div>
+						<div class="advanced-search-btn">
+							<button mat-raised-button type="submit" color="primary" class="search-btn" (click)="getBreedList();">Search</button>
+							<button mat-raised-button type="button" color="warn" class="clear-btn" (click)="clearFilter();">Clear</button>
+						</div>
+					</form>
+				</div>
+      </form>
+    </div>
+    <div class="pb-table">
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+
+
+          <ng-container matColumnDef="breename">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Breed Name</th>
+            <td mat-cell *matCellDef="let breed">
+              <span *ngIf="breed?.name">{{breed?.name}}</span>
+              <span *ngIf="!breed?.name">-</span>
+            </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="breedtype">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="pet_code">Pet Type</th>
+            <td mat-cell *matCellDef="let breed">
+              <span *ngIf="breed?.breed_master_ibfk_1?.type">{{breed?.breed_master_ibfk_1?.type}}</span>
+              <span *ngIf="!breed?.breed_master_ibfk_1?.type">-</span>
+            </td>
+          </ng-container>
+
+
+
+
+
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="status">Status</th>
+            <td mat-cell *matCellDef="let breed">{{ breed.status === true ? 'Active' : 'Inactive' }}</td>
+          </ng-container>
+
+
+
+
+
+
+          <ng-container matColumnDef="created">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="created_at">Created On</th>
+            <td mat-cell *matCellDef="let breed">{{ breed?.created_at | date: 'MM-dd-yyyy' }}</td>
+          </ng-container>
+
+
+
+          <!-- <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+              <td mat-cell *matCellDef="let breed">
+                <span *ngIf="breed['message']">{{breed['message']}}</span>
+                <span *ngIf="breed['message']">-</span>
+              </td>
+          </ng-container> -->
+
+          <ng-container matColumnDef="options">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let breed">
+              <mat-menu #appMenu="matMenu">
+                <button mat-menu-item (click)="edit(breed)">Edit</button>
+                <button mat-menu-item
+                (click)="openDialog(breed)">{{breed.status === false ? 'Active' : 'Inactive'}}</button>
+
+              </mat-menu>
+              <button mat-icon-button [matMenuTriggerFor]="appMenu"
+                (click)="$event.preventDefault(); $event.stopPropagation()">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <div class="no-records" *ngIf="TABLE_DATA?.length === 0">
+          No records found
+        </div>
+
+        <mat-paginator class="mat-paginator-sticky" [length]="tableConfig.totalRecords" [pageSizeOptions]="[10, 20, 30]"
+          showFirstLastButtons (page)="pageChanged($event)"></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

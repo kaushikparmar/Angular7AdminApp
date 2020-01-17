@@ -1,0 +1,77 @@
+<div class="pb-notification-list-component custom-padding">
+  <mat-nav-list class="custom-nav-list">
+    <mat-label>
+      <a [routerLink]="['/notification']">Notification</a>
+    </mat-label>
+    <!-- <mat-label>></mat-label>
+    <mat-label>List</mat-label> -->
+  </mat-nav-list>
+  <div class="pb-table-wraper">
+    <div class="filter-section">
+      <form #searchUser="ngForm">
+        <div class="listing-form d-flex justify-content-end align-items-center mb-2">
+          <div class="search-box d-none">
+            <mat-form-field class="mat-form-field">
+
+              <mat-label>Search</mat-label>
+              <input matInput name="search" autocomplete="off" [(ngModel)]="tableConfig.searchString" />
+            </mat-form-field>
+            <button mat-raised-button type="submit" color="primary" class="search-btn">Search</button>
+          </div>
+          <div class="add-div">
+            <button mat-raised-button color="primary" class="add-btn mr-2" *ngIf="dataSource" [disabled]="isAllRead.length === dataSource.length" (click)="readAllNotification()">Mark all as Read</button>
+          </div>
+          <div class="add-div">
+            <button  mat-raised-button color="warn" class="add-btn"
+              class="add-btn" [disabled]="TABLE_DATA?.length === 0" (click)="clearAllNotification()">Clear All</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="pb-table">
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource">
+          <ng-container matColumnDef="message">
+            <th mat-header-cell *matHeaderCellDef> Message </th>
+            <td mat-cell *matCellDef="let data" (click)="navigate(data)">
+              <span *ngIf="data.message">{{data.message}}</span>
+              <span *ngIf="!data.message">-</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="created_at">
+            <th mat-header-cell *matHeaderCellDef> Received On </th>
+            <td mat-cell *matCellDef="let data">
+              <span *ngIf="data.created_at">{{data.created_at | date : 'M/d/yy, h:mm a' }}</span>
+              <span *ngIf="!data.created_at">-</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="read">
+            <th mat-header-cell *matHeaderCellDef>Mark  As Read </th>
+            <td mat-cell *matCellDef="let data">
+              <div class="add-div p-2">
+                <button mat-raised-button color="primary" [disabled]="data.is_read" class="add-btn" (click)="updateNotification(data)">Read</button>
+              </div>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <!--(click)="edit(row)"-->
+        </table>
+        <div class="no-records" *ngIf="TABLE_DATA?.length === 0">
+          No records found
+        </div>
+        <mat-paginator class="mat-paginator-sticky" [length]="tableConfig.totalRecords" [pageSizeOptions]="[10, 20, 30]"
+          showFirstLastButtons (page)="pageChanged($event)">
+        </mat-paginator>
+        <!-- </form> -->
+      </div>
+      <!-- <mat-paginator class="mat-paginator-sticky" [length]="tableConfig.totalRecords" [pageSizeOptions]="[10, 20, 30]"
+        showFirstLastButtons (page)="pageChanged($event)">
+      </mat-paginator> -->
+    </div>
+  </div>
+</div>
+<div class="isLoading" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

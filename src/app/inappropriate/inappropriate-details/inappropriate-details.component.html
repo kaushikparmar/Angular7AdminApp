@@ -1,0 +1,133 @@
+<div class="custom-padding pb-inappropriate-details-component">
+    <mat-nav-list class="custom-nav-list">
+        <mat-label>
+            <a [routerLink]="['/inappropriate']">Inappropriate</a>
+        </mat-label>
+        <mat-label> > </mat-label>
+        <mat-label>Details</mat-label>
+    </mat-nav-list>
+    <div class="custom-form-padding">
+        <div class="row" *ngFor="let data of detailsData">
+            <div class="col-sm-6 details-section">
+                <mat-card class="cus-mat-card">
+                    <img mat-card-image class="details-image" *ngIf="data.pet_detail.profile_pic"
+                    src="{{originUrl}}/upload/{{data.pet_detail.profile_pic}}">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 text-md-left">
+                            <div class="details">
+                                <span class="text-uppercase">Name: {{data.pet_detail.name}}</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 text-md-right">
+                            <div class="details">
+                                <span class="text-uppercase">Created On</span>
+                                <div>{{ data?.created_at | date: 'MM-dd-yyyy' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+            <div class="col-sm-6">
+                <h4>Pet Information</h4>
+                <!-- <div class="details">
+                    <span class="text-uppercase">Name: {{data.pet_detail.name}}</span>
+                </div> -->
+                <div class="details">
+                    <span class="text-uppercase">Description:</span>
+                    <div>{{data.postDetails ? data.postDetails.description : data.sharedPost.description}}</div>
+                </div>
+                <!-- <div class="details">
+                    <span class="text-uppercase">Created On</span>
+                    <div>{{ data?.created_at | date: 'MM-dd-yyyy' }}</div>
+                </div> -->
+                <div class="details">
+                    <span class="text-uppercase">Total Views: {{data.total_views}}</span>
+                    <!-- <div *ngIf="data.total_views !== undefined && data.total_views !== null">{{data.total_views}}</div>
+                        <div *ngIf="data.total_views == undefined && data.total_views == null">-</div> -->
+                    </div>
+                    <div class="details">
+                        <span class="text-uppercase">Total Likes: {{data.total_likes}}</span>
+                        <!-- <div *ngIf="data.total_likes !== undefined && data.total_likes !== null">{{data.total_likes}}</div>
+                            <div *ngIf="data.total_likes == undefined && data.total_likes == null">-</div> -->
+                        </div>
+                        <div class="details">
+                            <span class="text-uppercase">Total Comments: {{data.total_comments}}</span>
+                            <!-- <div *ngIf="data.total_comments !== undefined && data.total_comments !== null">{{data.total_comments}}</div>
+                                <div *ngIf="data.total_comments == undefined && data.total_comments == null">-</div> -->
+                            </div>
+                            <div class="details">
+                                <span class="text-uppercase">Total Share: {{data.total_share}}</span>
+                                <!-- <div *ngIf="data.total_share !== undefined && data.total_share !== null">{{data.total_share}}</div>
+                                    <div *ngIf="data.total_share == undefined && data.total_share == null">-</div> -->
+                                </div>
+                                <div class="details">
+                                    <span class="text-uppercase">Total Spam: {{data.total_spam}}</span>
+                                    <!-- <div *ngIf="data.total_spam !== undefined && data.total_spam !== null">{{data.total_spam}}</div>
+                                        <div *ngIf="data.total_spam == undefined && data.total_spam == null">-</div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12" *ngIf = "isGallery && isGallery.length">
+                                    <label class="custom-label">Uploaded Photos:</label>
+                                    <div class="my-app-custom-plain-container-row">
+                                        <ng-container *ngFor="let img of imagesRect; let i = index">
+                                            <div *ngIf="i <= 5" class="custom-img-width custom-img-border">
+                                                <a class="more" *ngIf="(imagesRect.length) >= 7" (click)="openImageModalRow1(img)">
+                                                    +{{imagesRect.length - 5 - 1}}
+                                                    more
+                                                </a>
+                                                <img *ngIf="img.plain && img.plain.img; else noThumb1" class="my-app-custom-image-row"
+                                                [src]="img.plain.img" (click)="openImageModalRow1(img)" />
+                                                <ng-template #noThumb1>
+                                                    <img class="my-app-custom-image-row" [src]="img.modal.img" (click)="openImageModalRow1(img)" />
+                                                </ng-template>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                    <ks-modal-gallery [id]="1" [modalImages]="imagesRect" [plainGalleryConfig]="customPlainGalleryRowConfig1">
+                                    </ks-modal-gallery>
+                                </div>
+                            </div>
+                            <div class="pb-table">
+                                    <div class="mat-elevation-z8">
+                                        <table mat-table [dataSource]="dataSource">
+                                            <ng-container matColumnDef="file">
+                                                <th mat-header-cell *matHeaderCellDef>Media</th>
+                                                <td mat-cell *matCellDef="let dog">
+                                                    <div class="lookupimage-box-box" *ngIf="dog.spamPostDetail.profile_pic" style="height:70px;width:80px;padding:10px">
+                                                        <img src="{{originUrl}}/upload/{{dog.spamPostDetail.profile_pic}}" style="height:100%;width:100%;">
+                                                    </div>
+                                                    <div class="lookupimage-box-box" *ngIf="!dog.spamPostDetail.profile_pic" style="height:70px;width:80px;padding:10px">
+                                                        <img src="./assets/no-image.png" style="height:100%;width:100%;">
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="name">
+                                                <th mat-header-cell *matHeaderCellDef>Name</th>
+                                                <td mat-cell *matCellDef="let dog">{{ dog.spamPostDetail.name | titlecase}}</td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="ip">
+                                                <th mat-header-cell *matHeaderCellDef>IP</th>
+                                                <td mat-cell *matCellDef="let dog">{{ dog.ip }}</td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="created">
+                                                <th mat-header-cell *matHeaderCellDef>Created On</th>
+                                                <td mat-cell *matCellDef="let dog">{{ dog?.created_at | date: 'MM-dd-yyyy' }}</td>
+                                            </ng-container>
+                                            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                        </table>
+                                        <div class="no-records" *ngIf="TABLE_DATA?.length === 0">
+                                            No records found
+                                        </div>
+                                        <!-- <mat-paginator class="mat-paginator-sticky" [length]="tableConfig.totalRecords" [pageSizeOptions]="[10, 20, 30]"
+                                            showFirstLastButtons (page)="pageChanged($event)"></mat-paginator> -->
+                                        </div>
+                                </div>
+                            <div class="post-btn">
+                                <button mat-raised-button type="button" color="warn" class="add-btn"
+                                [routerLink]="['/inappropriate']">Close</button>
+                            </div>
+                            </div>
+                        </div>
