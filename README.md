@@ -1,2 +1,2 @@
-# Angular7AdminDemo
-Angular 7 Admin Demo
+# Angular7AdminApp
+Angular 7 Admin App
